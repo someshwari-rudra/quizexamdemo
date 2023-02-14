@@ -1,0 +1,10 @@
+export const AUTH = {
+  LOADING: "LOADING",
+  LOAD_DATA: "LOAD_DATA",
+  USER_DETAILS: "USER_DETAILS",
+};
+export const SIGN_UP = {
+  LOADING: "LOADING",
+  LOAD_DATA: "LOAD_DATA",
+  USER_DETAILS: "USER_DETAILS",
+};
