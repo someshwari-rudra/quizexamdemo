@@ -10,3 +10,60 @@
   text-align: center;
   margin: 10px 10px 20px 10px;
 }
+.main-sidebar {
+  margin-top: 4.5rem;
+  font-family: sans-serif;
+  display: grid;
+  grid-template-columns: 222px 1fr;
+}
+
+.sidebar {
+  padding: 10px;
+  width: 222px;
+  height: 100vh;
+  position: fixed;
+}
+
+.content {
+  width: 88vw;
+  margin-left: 13rem;
+  padding: 10px;
+}
+.links{
+  padding: 10px !important;
+  margin: 5px;
+}
+.navlinks {
+  text-decoration: none;
+  color: black;
+  width: 100%;
+}
+.navlinks:hover{
+  color: #080639;
+}
+
+
+.active {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  background: rgb(122, 117, 209);
+  padding: 5px;
+  border-radius: 3px;
+}
+.icon-color{
+  color: #645CBB;
+  margin-right: 10px;
+}
+.logo{
+  height:5.5vh;
+}
+.logo-img{
+  height: 100%;
+}
+
+.button{
+  outline: none !important;
+  border: none !important;
+  color: #fff !important;
+  background-color: #645CBB !important;
+}

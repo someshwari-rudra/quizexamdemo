@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LoginFields } from "../Data/LoginFields";
 import { userLogin } from "../redux/actions/auth";
-import { AUTH } from "../redux/actions/Constants";
 import CustomTextField from "../reusableComponents/CustomTextField";
 
 const Login = () => {
-  const [submit, setSubmit] = useState("Submit");
   const dispatch = useDispatch();
   const { userDetails } = useSelector((state) => state.Auth);
+  console.log("userDetails :>> ", userDetails);
   const { loading } = useSelector((state) => state.Auth);
   const {
     register,
@@ -21,11 +20,7 @@ const Login = () => {
 
   const onsubmit = (data) => {
     console.log(data);
-    setSubmit("Submitting");
     dispatch(userLogin(data));
-    setTimeout(() => {
-      dispatch({ type: AUTH.LOADING });
-    }, 2500);
   };
 
   return (
@@ -70,7 +65,7 @@ const Login = () => {
                     <span className="sr-only"></span>
                   </div>
                 )}
-                {submit}
+                submit
               </button>
               <Link to="/signUp" className="m-2">
                 Don't have an account? Sign Up.
