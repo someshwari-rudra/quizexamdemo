@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { signUpFields } from "../Data/signUpFields";
 import { UserSignUp } from "../redux/actions/auth";
 import CustomTextField from "../reusableComponents/CustomTextField";
-// import { userSignUp } from "../store/actions/actions";
+
 
 const SignUp = () => {
-  const [submit, setSubmit] = useState("Submit");
-  const [disable, setDisable] = React.useState(false);
   const dispatch = useDispatch();
   const { userDetails } = useSelector((state) => state.signUp);
    const { loading } = useSelector((state) => state.signUp);
@@ -25,8 +23,6 @@ const SignUp = () => {
   const onsubmit = (data) => {
     delete data.confirmPassword;
     console.log(data);
-    setSubmit("Submitting");
-    setDisable(true);
     dispatch(UserSignUp(data));
   };
 

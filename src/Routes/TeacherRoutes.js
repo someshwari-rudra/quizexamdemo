@@ -3,6 +3,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import CreateExam from "../screens/teacher/CreateExam";
 import VerifyExam from "../screens/teacher/VerifyExam";
 import ViewExam from "../screens/teacher/ViewExam";
+import ViewSingleStudent from "../screens/teacher/ViewSingleStudent";
 import ViewStudents from "../screens/teacher/ViewStudents";
 
 export const TeacherRoutes = [
@@ -11,6 +12,14 @@ export const TeacherRoutes = [
     element: (
       <ProtectedRoute>
         <ViewStudents />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/ViewStudent/:id",
+    element: (
+      <ProtectedRoute>
+        <ViewSingleStudent />
       </ProtectedRoute>
     ),
   },

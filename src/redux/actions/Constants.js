@@ -11,5 +11,6 @@ export const SIGN_UP = {
 
 export const TEACHER = {
   VIEW_STUDENT: "VIEW_STUDENT",
+  VIEW_SINGLE_STUDENT:"VIEW_SINGLE_STUDENT"
   
 }

@@ -2,6 +2,7 @@ import { TEACHER } from "../actions/Constants";
 
 const initialState = {
   ViewStudent: [],
+  ViewSingleStudentData: [],
 };
 export const TeacherReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -9,6 +10,11 @@ export const TeacherReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         ViewStudent: payload,
+      };
+    case TEACHER.VIEW_SINGLE_STUDENT:
+      return {
+        ...state,
+        ViewSingleStudentData: payload,
       };
     default:
       return state;

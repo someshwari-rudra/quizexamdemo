@@ -1,6 +1,7 @@
 import React from 'react'
+import ButtonMapping from './ButtonMapping';
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, buttonAttributes }) => {
   return (
     <table className="table table-bordered table-responsive">
       <thead>
@@ -12,8 +13,7 @@ const Table = ({ columns, data }) => {
               </th>
             );
           })}
-          <th>Edit</th>
-          <th>Delete</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -23,9 +23,18 @@ const Table = ({ columns, data }) => {
               {columns.map((col) => {
                 return <td key={col}>{row[col]}</td>;
               })}
+              {
+                <td>
+                  <ButtonMapping
+                    buttonAttributes={buttonAttributes}
+                    id={row._id}
+                  />
+                </td>
+              }
             </tr>
           );
         })}
+        
       </tbody>
     </table>
   );
