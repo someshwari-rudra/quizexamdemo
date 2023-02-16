@@ -12,7 +12,9 @@ const SignUp = () => {
   const [disable, setDisable] = React.useState(false);
   const dispatch = useDispatch();
   const { userDetails } = useSelector((state) => state.signUp);
+   const { loading } = useSelector((state) => state.signUp);
   console.log('userDetails :>> ', userDetails);
+  console.log('loading :>> ', loading);
   const {
     register,
     handleSubmit,
@@ -26,10 +28,6 @@ const SignUp = () => {
     setSubmit("Submitting");
     setDisable(true);
     dispatch(UserSignUp(data));
-    setTimeout(() => {
-      setSubmit("submit");
-      setDisable(false);
-    }, 2000);
   };
 
   return (
@@ -56,13 +54,21 @@ const SignUp = () => {
               );
             })}
             <div className="d-flex flex-column justify-content-center align-items-center">
-              <button
+             <button
                 type="submit"
-                disabled={disable}
+                disabled={loading}
                 className="btn btn-primary mt-3"
               >
-                {submit}
-              </button>
+                {loading && (
+                  <div
+                    className="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  >
+                    <span className="sr-only"></span>
+                  </div>
+                )}
+                submit
+                </button>
               <Link to="/login" className="m-2">
                 All ready have an account? Login.
               </Link>

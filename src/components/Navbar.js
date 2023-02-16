@@ -3,12 +3,16 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function CustomNavbar({ image,color }) {
   const userName = JSON.parse(localStorage.getItem("userName"));
+  const Navigate = useNavigate()
   const handleClick = () => {
     localStorage.clear()
+    Navigate("/")
     window.location.reload()
+
   }
   return (
     <Navbar className="fixed-top" expand="lg" style={{background:color}}>

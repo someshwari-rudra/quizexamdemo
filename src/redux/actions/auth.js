@@ -25,13 +25,17 @@ export const userLogin = (data) => (dispatch) => {
 };
 
 export const UserSignUp = (data) => (dispatch) => {
-  dispatch({ type: SIGN_UP.LOADING });
+  let flag = false;
+   dispatch({ type: SIGN_UP.LOADING_SIGN_UP });
   Api.post(`/users/SignUp`, data).then((response) => {
     console.log("response :>> ", response.message);
-    dispatch({ type: SIGN_UP.USER_DETAILS, payload: response.message });
+    if (response) {
+      flag = true;
+    }
+     if (flag === true) {
+       console.log("runners :>> ", "runners");
+          dispatch({ type: SIGN_UP.LOADING_SIGN_UP });
+     }
+    dispatch({ type: SIGN_UP.USER_DETAILS_SIGN_UP, payload: response.message });
   });
 };
-
-export const userLogout = () => {
-  localStorage.clear();
-}

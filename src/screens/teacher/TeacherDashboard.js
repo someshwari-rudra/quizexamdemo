@@ -1,10 +1,10 @@
-import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom';
-import CustomNavbar from '../../components/Navbar';
-import Sidebar from '../../components/Sidebar';
-import { teacherSidebarMenu } from '../../Data/teacherSidebarMenu';
-import teacherPortal from "../../Assets/Images/School_portal.png"
-import { TeacherRoutes } from '../../Routes/TeacherRoutes';
+import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import CustomNavbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
+import { teacherSidebarMenu } from "../../Data/teacherSidebarMenu";
+import teacherPortal from "../../Assets/Images/School_portal.png";
+import { TeacherRoutes } from "../../Routes/TeacherRoutes";
 
 const TeacherDashboard = () => {
   return (
@@ -28,6 +28,6 @@ const TeacherDashboard = () => {
       </div>
     </div>
   );
-}
+};
 
-export default TeacherDashboard
+export default TeacherDashboard;
