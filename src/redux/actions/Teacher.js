@@ -3,7 +3,7 @@ import { TEACHER } from "./Constants";
 
 export const ViewStudentData = () => (dispatch) => {
   Api.get("/dashboard/Teachers").then((response) => {
-    console.log("response.data :>> ", response.data);
+    console.log("response :>> ", response);
     dispatch({ type: TEACHER.VIEW_STUDENT, payload: response.data });
   });
 };
@@ -16,4 +16,8 @@ export const ViewsingleStudentData = (id) => (dispatch) => {
       dispatch({ type: TEACHER.VIEW_SINGLE_STUDENT, payload: response.data });
     })
     .catch((error) => console.log("error :>> ", error));
+};
+
+export const StoreExamQuestions = (data) => {
+  return { type: TEACHER.STORE_QUESTIONS, payload: data };
 };

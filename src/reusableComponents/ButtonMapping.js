@@ -20,13 +20,53 @@ const ButtonMapping = ({ buttonAttributes, id }) => {
           );
         case "view_Details":
           return (
-              <CustomButton
-                 //onClick={() => onClick(id)}
-                {...{ ...rest }}
-                key={index}
-              >
-                {value}
-              </CustomButton>
+            <CustomButton
+              //onClick={() => onClick(id)}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
+          );
+        case "prev":
+          return (
+            <CustomButton
+              //onClick={() => onClick(id)}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
+          );
+        case "skip":
+          return (
+            <CustomButton
+              //onClick={() => onClick(id)}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
+          );
+        case "next":
+          return (
+            <CustomButton
+              //onClick={() => onClick(id)}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
+          );
+        case "submit":
+          return (
+            <CustomButton
+              //onClick={() => onClick(id)}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
           );
         default:
           return (

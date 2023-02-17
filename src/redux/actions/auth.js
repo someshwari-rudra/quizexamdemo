@@ -6,7 +6,7 @@ export const userLogin = (data) => (dispatch) => {
   dispatch({ type: AUTH.LOADING });
   Api.post(`/users/Login`, data)
     .then((response) => {
-      console.log('response.message :>> ', response);
+      console.log('response :>> ', response);
       if (response) {
         flag = true
       }

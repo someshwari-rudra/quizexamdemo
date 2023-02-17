@@ -1,10 +1,10 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import { StudentSidebarMenu } from "../../Data/StudentSidebarMenu";
-import StudentProfile from "./StudentProfile";
 import studentImage from "../../Assets/Images/StudentLogo.png"
 import Navbar from "../../components/Navbar";
+import { StudentRoutes } from "../../Routes/StudentRoutes";
 
 const StudentDashboard = () => {
   return (
@@ -16,7 +16,13 @@ const StudentDashboard = () => {
         </div>
         <div className="content">
           <Routes>
-            <Route exact path="/All_exam" element={<StudentProfile />} />
+            <Route path="/" element={<Navigate to="/listExam" />}></Route>
+            {StudentRoutes.map((routes, index) => {
+              const { path, exact, element: Comp } = routes;
+              return (
+                <Route path={path} exact={exact} element={Comp} key={index} />
+              );
+            })}
           </Routes>
         </div>
       </div>

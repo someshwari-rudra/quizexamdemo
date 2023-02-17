@@ -3,9 +3,8 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import ExamForm from "../../components/ExamForm";
 import { CreateExamFields } from "../../Data/CreateExamFields";
-import { StoreExamQuestions } from "../../redux/actions/Teacher";
 
-const CreateExam = () => {
+const ListExam = () => {
   const {
     register,
     handleSubmit,
@@ -17,15 +16,13 @@ const CreateExam = () => {
 
   const HandleOnSubmit = (data) => {
     console.log("data-createExam :>> ", data);
-    dispatch(StoreExamQuestions(data));
+    //   dispatch(StoreExamQuestions(data));
     reset();
   };
-
   const onSubmit = handleSubmit(HandleOnSubmit);
 
   return (
-    <div className="d-flex mt-4 justify-content-center flex-column align-items-center">
-      <h1>Create Exam</h1>
+    <div className="container-fluid">
       <ExamForm
         fields={CreateExamFields}
         watch={watch}
@@ -37,4 +34,4 @@ const CreateExam = () => {
   );
 };
 
-export default CreateExam;
+export default ListExam;
