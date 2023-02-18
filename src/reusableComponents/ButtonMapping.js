@@ -1,8 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import CustomButton from './CustomButton';
+import React from "react";
+import { Link } from "react-router-dom";
+import CustomButton from "./CustomButton";
 
-const ButtonMapping = ({ buttonAttributes, id }) => {
+const ButtonMapping = ({ buttonAttributes, id, data }) => {
   return Array.isArray(buttonAttributes) ? (
     buttonAttributes.map(({ value, typeOf, onClick, ...rest }, index) => {
       switch (typeOf) {
@@ -31,7 +31,7 @@ const ButtonMapping = ({ buttonAttributes, id }) => {
         case "prev":
           return (
             <CustomButton
-              //onClick={() => onClick(id)}
+              onClick={() => onClick()}
               {...{ ...rest }}
               key={index}
             >
@@ -61,7 +61,7 @@ const ButtonMapping = ({ buttonAttributes, id }) => {
         case "submit":
           return (
             <CustomButton
-              //onClick={() => onClick(id)}
+              onClick={() => onClick(data)}
               {...{ ...rest }}
               key={index}
             >
@@ -86,4 +86,4 @@ const ButtonMapping = ({ buttonAttributes, id }) => {
   );
 };
 
-export default ButtonMapping
+export default ButtonMapping;

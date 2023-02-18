@@ -1,10 +1,9 @@
 
 import React from "react";
-import { ExamFormBtnAttribute } from "../Data/ExamFormBtnAttribute";
 import ButtonMapping from "../reusableComponents/ButtonMapping";
 import CustomTextField from "../reusableComponents/CustomTextField";
 
-const ExamForm = ({ fields, register, errors, onSubmit, watch }) => {
+const ExamForm = ({ fields, register, errors, onSubmit, watch,ExamFormBtnAttribute,data}) => {
 
   return (
     <div>
@@ -22,7 +21,7 @@ const ExamForm = ({ fields, register, errors, onSubmit, watch }) => {
               />
             );
           })}
-          <ButtonMapping buttonAttributes={ExamFormBtnAttribute} />
+          <ButtonMapping buttonAttributes={ExamFormBtnAttribute} data={data} />
         </form>
       </div>
     </div>

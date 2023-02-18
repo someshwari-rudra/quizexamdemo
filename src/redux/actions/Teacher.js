@@ -18,6 +18,20 @@ export const ViewsingleStudentData = (id) => (dispatch) => {
     .catch((error) => console.log("error :>> ", error));
 };
 
-export const StoreExamQuestions = (data) => {
-  return { type: TEACHER.STORE_QUESTIONS, payload: data };
+export const StoreExamQuestions = (data) => (dispatch) => {
+  dispatch({ type: TEACHER.STORE_QUESTIONS, payload: data })
+
+  
+};
+
+export const PostExamQuestions = (data) => (dispatch) => {
+  console.log("called :>> ", "called");
+  Api.post(`/dashboard/Teachers/Exam`, data)
+    .then((response) => {
+      console.log("response from postExam :>> ", response);
+      dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: response.message });
+    })
+    .catch((error) => {
+      console.log("error :>> ", error);
+    });
 };

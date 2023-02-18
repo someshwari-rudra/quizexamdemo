@@ -1,5 +1,7 @@
 import classNames from "classnames";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { OnChange } from "../redux/actions/OnChange";
 
 const CustomTextField = (props) => {
   const {
@@ -20,6 +22,22 @@ const CustomTextField = (props) => {
     ...inputProps
   } = props;
 
+  const values = useSelector((state) => state.teacher.prev_que);
+  const currentIndex = useSelector((state) => state.teacher.currentIndex);
+  const prev_Value = useSelector((state) => state.teacher.prev_Value);
+  const allInputValue = useSelector((state) => state.OnChangeReducer);
+
+  const dispatch = useDispatch()
+  console.log("values[currentIndex] :>> ", values[currentIndex]);
+  console.log("currentIndex :>> ", currentIndex);
+  const prevValues = values[currentIndex] || {};
+  const handleChange = (e) => {
+    const name = e.target.name
+    const value = e.target.value
+    console.log('name :>> ', name);
+    dispatch(OnChange(name, value));
+  };
+
   const role = JSON.parse(localStorage.getItem("userType"));
   let disabled = false;
   if (role === "student") {
@@ -35,10 +53,12 @@ const CustomTextField = (props) => {
               className={classNames("form-control shadow-sm", {
                 "is-invalid": errors[name],
               })}
+              onChange={handleChange}
               {...inputProps}
               {...register(name, {
                 required: !disabled,
                 pattern: pattern,
+                onChange: handleChange,
                 validate: {
                   matchPassword: (value) => {
                     let watchedValue = watch("password");
@@ -49,6 +69,8 @@ const CustomTextField = (props) => {
                   },
                 },
               })}
+              //  value={prevValues[name]}
+              value={prev_Value ? prevValues[name] : allInputValue[name]}
             />
             {errors?.[name]?.type === "required" && (
               <p className="text-danger">{errorMessage}</p>
@@ -81,9 +103,7 @@ const CustomTextField = (props) => {
                       value={item.name}
                       {...register("option", {
                         required: !optionDisabled,
-                        onChange: (e) => {
-                          console.log(e.target.value);
-                        },
+                        onChange: handleChange,
                       })}
                       // checked={selectedOption === "option1"}
                       // onChange={handleOptionChange}
@@ -101,10 +121,13 @@ const CustomTextField = (props) => {
                       {...rest}
                       {...register(item.name, {
                         required: !disabled && "This field is required",
-                        onChange: (e) => {
-                          console.log(e.target.value);
-                        },
+                        onChange: handleChange,
                       })}
+                      value={
+                        prev_Value
+                          ? prevValues[item.name]
+                          : allInputValue[item.name]
+                      }
                     />
                     {errors?.[item.name]?.type === "required" && (
                       <p className="text-danger">{optionErrorMessage}</p>

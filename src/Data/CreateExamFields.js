@@ -9,7 +9,7 @@ export const CreateExamFields = [
   },
   {
     id: 2,
-    name: "Question",
+    name: "question",
     inputType: "input",
     type: "text",
     placeholder: "Enter Question",
@@ -52,123 +52,165 @@ export const CreateExamFields = [
   },
   {
     id: 10,
-    name: "ans",
+    name: "answer",
     inputType: "input",
     type: "text",
     placeholder: "Enter answer",
     errorMessage: "Answer is required..!",
   },
+  {
+    id: 11,
+    name: "notes",
+    inputType: "input",
+    type: "text",
+    placeholder: "Enter Note",
+    errorMessage: "Note is required..!",
+  },
 ];
-// export const CreateExamFields = [
+
+// const data = [
 //   {
-//     id: 1,
-//     subject: {
-//         id: "subject",
-//         option: false,
-//         label: "Subject",
-//         type: "text",
-//         name: "subject",
-//         value: "",
-//         onChange: (event) =>
-//           console.log("Subject changed:", event.target.value),
-//       },
-//     question: {
-//         id: "question",
-//         option: false,
-//         label: "Question",
-//         type: "text",
-//         name: "question",
-//         value: "",
-//         onChange: (event) =>
-//           console.log("Question changed:", event.target.value),
-//       },
-//     options: [
+//     subjectName: "social",
+//     questions: [
 //       {
-//         id: "option1",
-//         label: "Option 1",
-//         type: "text",
-//         name: "option1",
-//         value: "",
-//         onChange: (event) =>
-//           console.log("Option 1 changed:", event.target.value),
+//         question:
+//           "Who returned his knighthood after the 'Jallianwala Bagh massacre?",
+//         answer: "Rabindra Nath Tagore",
+//         options: [
+//           "Dr. B. R. Ambedkar",
+//           "Mahatma Gandhi",
+//           "Bal Gangadhar Tilak",
+//           "Rabindra Nath Tagore",
+//         ],
 //       },
 //       {
-//         id: "option2",
-//         label: "Option 2",
-//         type: "text",
-//         name: "option2",
-//         value: "",
-//         onChange: (event) =>
-//           console.log("Option 2 changed:", event.target.value),
+//         question:
+//           " Where is the dargah of Sheikh Khwaja Qutbuddin Bakhtiyar Kaki located?",
+//         answer: "Delhi",
+//         options: [" Ajmer", " Ajidhan", "Agra", "Delhi"],
 //       },
 //       {
-//         id: "option3",
-//         label: "Option 3",
-//         type: "text",
-//         name: "option3",
-//         value: "",
-//         onChange: (event) =>
-//           console.log("Option 3 changed:", event.target.value),
+//         question:
+//           "When was the budget system introduced for the first time in India?",
+//         answer: "1890",
+//         options: ["1867", "1860", "1897", "1890"],
 //       },
 //       {
-//         id: "option4",
-//         label: "Option 4",
-//         type: "text",
-//         name: "option4",
-//         value: "",
-//         onChange: (event) =>
-//           console.log("Option 4 changed:", event.target.value),
+//         question: "Who is the author/writer of 'The Silent Cry'?",
+//         answer: "Ruskin Bond",
+//         options: [
+//           "Haruki Murakami",
+//           "Kenzaburo Oye",
+//           "John Milton",
+//           "Ruskin Bond",
+//         ],
+//       },
+//       {
+//         question: "In which sport does Sunil Chhetri represent India?",
+//         answer: "Cricket",
+//         options: ["Football", "Cricket", "Hawk", "Volleyball"],
+//       },
+//       {
+//         question: "Where is Guindi National Park located?",
+//         answer: "Himachal Pradesh",
+//         options: [
+//           "Andhra Pradesh",
+//           "Telangana",
+//           "Himachal Pradesh",
+//           "Tamil Nadu",
+//         ],
+//       },
+//       {
+//         question: " Which Indian founded the Natal Indian Congress?",
+//         answer: "Bal Gangadhar Tilak",
+//         options: [
+//           "Jawaharlal Nehru",
+//           "Govind Ranade",
+//           "Mahatma Gandhi",
+//           "Bal Gangadhar Tilak",
+//         ],
+//       },
+//       {
+//         question:
+//           " Which cell organelle is also called the 'powerhouse of the cell'?",
+//         answer: " Plastid",
+//         options: ["Lysosomes", "Mitochondria", " Golgi apparatus", " Plastid"],
+//       },
+//       {
+//         question:
+//           "Who was the President of the 19th session of the Indian National Congress?",
+//         answer: "Surendranath Banerjee",
+//         options: [
+//           "Gopal Krishna Gokhale",
+//           "Sir Henry Cotton",
+//           " Lal Mohan Ghosh",
+//           "Surendranath Banerjee",
+//         ],
+//       },
+//       {
+//         question:
+//           " Which of the following was not built during the Tughlaq period?",
+//         answer: "Tuglakabaad",
+//         options: [
+//           "Window Mosque",
+//           "Firoj Shah Kotla",
+//           "Jama Masjid",
+//           "Tuglakabaad",
+//         ],
+//       },
+//       {
+//         question: "Who appoints the Chief Justice in India?",
+//         answer: "President",
+//         options: [
+//           "Prime Minister",
+//           "Vice-President",
+//           "Speaker of Lok Sabha",
+//           "President",
+//         ],
+//       },
+//       {
+//         question: "How many members are there in the GST council?",
+//         answer: "23",
+//         options: ["30", "35", "33", "23"],
+//       },
+//       {
+//         question: "In which state is Surajkund Lake located?",
+//         answer: "Delhi",
+//         options: ["Haryana", "Punjab", " Bihar", "Delhi"],
+//       },
+//       {
+//         question:
+//           "On this matter was the fight between Mohammad Gauri and Prithviraj Chauhan?",
+//         answer: "Battle of Buxar",
+//         options: [
+//           "Battle of Tarain",
+//           "Battle of Khanwa",
+//           "Battle of Plassey",
+//           "Battle of Buxar",
+//         ],
+//       },
+//       {
+//         question: "In which state of India is Gol Gumbaz located?",
+//         answer: "Karnataka",
+//         options: ["Delhi", "Kerala", "Karnataka", "Maharashtra"],
 //       },
 //     ],
-//   },
-//   {
-//     id: "subject",
-//     option: false,
-//     label: "Subject",
-//     type: "text",
-//     name: "subject",
-//     value: "",
-//     onChange: (event) => console.log("Subject changed:", event.target.value),
-//   },
-//   {
-//     id: "question",
-//     option: false,
-//     label: "Question",
-//     type: "text",
-//     name: "question",
-//     value: "",
-//     onChange: (event) => console.log("Question changed:", event.target.value),
-//   },
-//   {
-//     id: "option1",
-//     label: "Option 1",
-//     type: "text",
-//     name: "option1",
-//     value: "",
-//     onChange: (event) => console.log("Option 1 changed:", event.target.value),
-//   },
-//   {
-//     id: "option2",
-//     label: "Option 2",
-//     type: "text",
-//     name: "option2",
-//     value: "",
-//     onChange: (event) => console.log("Option 2 changed:", event.target.value),
-//   },
-//   {
-//     id: "option3",
-//     label: "Option 3",
-//     type: "text",
-//     name: "option3",
-//     value: "",
-//     onChange: (event) => console.log("Option 3 changed:", event.target.value),
-//   },
-//   {
-//     id: "option4",
-//     label: "Option 4",
-//     type: "text",
-//     name: "option4",
-//     value: "",
-//     onChange: (event) => console.log("Option 4 changed:", event.target.value),
+//     notes: [
+//       "aaaa",
+//       "aaadsd",
+//       "afrte",
+//       "uyrt",
+//       "as",
+//       "ssss",
+//       "dsad",
+//       "sss",
+//       "sdfsf",
+//       "sssstyr",
+//       "aaasdfert",
+//       "erwer",
+//       "reter",
+//       "ytutyiu",
+//       "ytuyioiu",
+//     ],
 //   },
 // ];

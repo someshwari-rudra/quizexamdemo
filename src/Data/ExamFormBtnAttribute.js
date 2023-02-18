@@ -21,6 +21,6 @@ export const ExamFormBtnAttribute = [
     value: "Submit",
     typeOf: "submit",
     type: "button",
-    // onClick: (id) => dispatch(deleteUserListByIdAction(id)),
+    // onClick: (id) => dispatch(PostExamQuestions(id)),
   },
 ];
