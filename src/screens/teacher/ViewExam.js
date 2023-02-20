@@ -1,6 +1,7 @@
 import React from 'react'
 
 const ViewExam = () => {
+
   return (
     <div>ViewExam</div>
   )

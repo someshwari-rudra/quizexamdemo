@@ -35,3 +35,10 @@ export const PostExamQuestions = (data) => (dispatch) => {
       console.log("error :>> ", error);
     });
 };
+
+export const RemoveQuestion = (index) => {
+  return {
+    type: TEACHER.REMOVE_QUESTION,
+    payload:index
+  }
+}

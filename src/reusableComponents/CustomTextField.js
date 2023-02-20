@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { TEACHER } from "../redux/actions/Constants";
 import { OnChange } from "../redux/actions/OnChange";
 
 const CustomTextField = (props) => {
@@ -25,17 +26,24 @@ const CustomTextField = (props) => {
   const values = useSelector((state) => state.teacher.prev_que);
   const currentIndex = useSelector((state) => state.teacher.currentIndex);
   const prev_Value = useSelector((state) => state.teacher.prev_Value);
-  const allInputValue = useSelector((state) => state.OnChangeReducer);
+  const subjectName = useSelector((state) => state.teacher.subjectName);
+  const ONchnage = useSelector((state) => state.OnChangeReducer);
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-  console.log("values[currentIndex] :>> ", values[currentIndex]);
-  console.log("currentIndex :>> ", currentIndex);
+  const subjectValue = watch("subject");
+  const handleBlur = () => {
+    if (subjectValue) {
+      document.getElementsByName("subject")[0].setAttribute("disabled", true);
+    }
+  };
+
   const prevValues = values[currentIndex] || {};
   const handleChange = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-    console.log('name :>> ', name);
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log("name :>> ", name);
     dispatch(OnChange(name, value));
+    dispatch({ type: TEACHER.PREV_LOADING, payload: false });
   };
 
   const role = JSON.parse(localStorage.getItem("userType"));
@@ -59,6 +67,7 @@ const CustomTextField = (props) => {
                 required: !disabled,
                 pattern: pattern,
                 onChange: handleChange,
+                onBlur: handleBlur,
                 validate: {
                   matchPassword: (value) => {
                     let watchedValue = watch("password");
@@ -69,8 +78,13 @@ const CustomTextField = (props) => {
                   },
                 },
               })}
-              //  value={prevValues[name]}
-              value={prev_Value ? prevValues[name] : allInputValue[name]}
+              defaultValue={
+                name === "subject"
+                  ? subjectName
+                  : prev_Value
+                  ? prevValues[name] ?? ONchnage[name]
+                  : ONchnage[name] ?? ONchnage[name]
+              }
             />
             {errors?.[name]?.type === "required" && (
               <p className="text-danger">{errorMessage}</p>
@@ -125,8 +139,8 @@ const CustomTextField = (props) => {
                       })}
                       value={
                         prev_Value
-                          ? prevValues[item.name]
-                          : allInputValue[item.name]
+                          ? prevValues[item.name] ?? ONchnage[item.name]
+                          : ONchnage[item.name] ?? ""
                       }
                     />
                     {errors?.[item.name]?.type === "required" && (
