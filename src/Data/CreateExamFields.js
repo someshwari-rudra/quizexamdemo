@@ -1,3 +1,11 @@
+import { useSelector } from "react-redux";
+
+export const Count = () => {
+ const count= useSelector((state) => state.teacher.currentIndex+1);
+  const questionCount = "Q" + count
+return questionCount;
+};
+
 export const CreateExamFields = [
   {
     id: 1,
@@ -12,6 +20,7 @@ export const CreateExamFields = [
     name: "question",
     inputType: "input",
     type: "text",
+    label:  <Count/> ,
     placeholder: "Enter Question",
     errorMessage: "Question is required..!",
   },

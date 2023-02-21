@@ -19,9 +19,7 @@ export const ViewsingleStudentData = (id) => (dispatch) => {
 };
 
 export const StoreExamQuestions = (data) => (dispatch) => {
-  dispatch({ type: TEACHER.STORE_QUESTIONS, payload: data })
-
-  
+  dispatch({ type: TEACHER.STORE_QUESTIONS, payload: data });
 };
 
 export const PostExamQuestions = (data) => (dispatch) => {
@@ -36,9 +34,25 @@ export const PostExamQuestions = (data) => (dispatch) => {
     });
 };
 
-export const RemoveQuestion = (index) => {
+export const RemoveQuestion = (index, que, data) => {
   return {
     type: TEACHER.REMOVE_QUESTION,
-    payload:index
-  }
+    payload: { index: index, que: que,data:data },
+  };
+};
+
+export const ViewExamAction = () => (dispatch) => {
+  Api.get("dashboard/Teachers/viewExam")
+    .then((response) => {
+      console.log("response :>> ", response);
+    })
+    .catch((error) => {
+      console.log("error :>> ", error);
+    });
+};
+
+export const clearAllOnsubmit = () => {
+  return {
+    type: TEACHER.CLEAR_ALL_ONSUBMIT,
+  };
 }

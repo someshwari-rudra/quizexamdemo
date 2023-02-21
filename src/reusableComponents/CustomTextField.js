@@ -19,6 +19,7 @@ const CustomTextField = (props) => {
     input_radio,
     register,
     watch,
+    getValues,
     errors,
     ...inputProps
   } = props;
@@ -37,11 +38,18 @@ const CustomTextField = (props) => {
     }
   };
 
+  const handleMouseOver = () => {
+    console.log("runned :>> ", "runned");
+    if (subjectValue) {
+      document.getElementsByName("subject")[0].disabled = false;
+    }
+  };
+
   const prevValues = values[currentIndex] || {};
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log("name :>> ", name);
     dispatch(OnChange(name, value));
     dispatch({ type: TEACHER.PREV_LOADING, payload: false });
   };
@@ -68,6 +76,8 @@ const CustomTextField = (props) => {
                 pattern: pattern,
                 onChange: handleChange,
                 onBlur: handleBlur,
+                onmouseenter: handleMouseOver,
+                shouldValidate: name === "notes",
                 validate: {
                   matchPassword: (value) => {
                     let watchedValue = watch("password");
@@ -78,12 +88,12 @@ const CustomTextField = (props) => {
                   },
                 },
               })}
-              defaultValue={
+              value={
                 name === "subject"
-                  ? subjectName
+                  ? subjectName ?? ONchnage[name]
                   : prev_Value
                   ? prevValues[name] ?? ONchnage[name]
-                  : ONchnage[name] ?? ONchnage[name]
+                  : ONchnage[name] ?? ""
               }
             />
             {errors?.[name]?.type === "required" && (
@@ -134,8 +144,60 @@ const CustomTextField = (props) => {
                       })}
                       {...rest}
                       {...register(item.name, {
-                        required: !disabled && "This field is required",
+                        required: !disabled,
                         onChange: handleChange,
+                        validate: {
+                          uniqueOptions: (value) => {
+                            const options = [
+                              "Option1",
+                              "Option2",
+                              "Option3",
+                              "Option4",
+                            ];
+                            const values = options.map(
+                              (option) => getValues()[option]
+                            );
+                            const uniqueValues = new Set(
+                              values.filter((v) => v !== "")
+                            );
+                            if (uniqueValues.size !== values.length) {
+                              const duplicateOption = options.find(
+                                (option) =>
+                                  values.filter(
+                                    (v) => v === getValues()[option]
+                                  ).length > 1
+                              );
+                              return `${item.name} and ${duplicateOption} cannot have the same value`;
+                            }
+                          },
+                          // OptionValidation: (value) => {
+                          //   console.log("value", value);
+                          //   if (name === "Option1") {
+                          //     return (
+                          //       value === getValues().Option2 &&
+                          //       getValues().Option3 &&
+                          //       getValues().Option4
+                          //     );
+                          //   }
+                          //   if (name === "Option2") {
+                          //     return (
+                          //       value === getValues().Option1 &&
+                          //       getValues().Option3 &&
+                          //       getValues().Option4
+                          //     );
+                          //   }
+                          //   // if (
+                          //   //   value === getValues().Option1 &&
+                          //   //   getValues().Option2 &&
+                          //   //   getValues().Option3 &&
+                          //   //   getValues().Option4
+                          //   // ) {
+                          //   //   return false;
+                          //   // } else {
+                          //   //   return true;
+                          //   // }
+                          // },
+                        },
                       })}
                       value={
                         prev_Value
@@ -145,6 +207,11 @@ const CustomTextField = (props) => {
                     />
                     {errors?.[item.name]?.type === "required" && (
                       <p className="text-danger">{optionErrorMessage}</p>
+                    )}
+                    {errors?.[item.name] && (
+                      <div className="text-danger">
+                        {errors[item.name].message}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -188,6 +255,11 @@ const CustomTextField = (props) => {
     <>
       {option ? (
         renderSwitch(inputType)
+      ) : label ? (
+        <div className="row d-flex d-flex justify-content-center align-items-center">
+          <div className="col-1">{label && <label>{label}</label>}</div>
+          <div className="col-11">{renderSwitch(inputType)}</div>
+        </div>
       ) : (
         <div className="row">
           <div className="col">{renderSwitch(inputType)}</div>

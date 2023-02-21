@@ -10,6 +10,7 @@ const initialState = {
   prev_Value: false,
   notes: [],
   response: "",
+  diableSubject: false,
 };
 export const TeacherReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -49,12 +50,29 @@ export const TeacherReducer = (state = initialState, { type, payload }) => {
         prev_Value: payload,
       };
     case TEACHER.REMOVE_QUESTION:
-      console.log("payload inside remmv:>> ", payload);
+      const prevQuestions = [...state.prev_que];
+      delete payload.data.subject;
+      prevQuestions.splice(payload.index, 1, payload.data);
+      const ques = [...state.questions];
+      delete payload.que.subject;
+      ques.splice(payload.index, 1, payload.que);
       return {
         ...state,
-        notes: [...state.notes.filter((_, index) => index !== payload)],
-        questions: state.questions.filter((_, index) => index !== payload),
-        prev_que: state.prev_que.filter((_, index) => index !== payload),
+        prev_que: prevQuestions,
+        questions: ques,
+      };
+    case TEACHER.DISABLE_SUBJECT:
+      return {
+        ...state,
+        prev_Value: payload,
+      };
+    case TEACHER.CLEAR_ALL_ONSUBMIT:
+      return {
+        ...state,
+        questions: [],
+        prev_que: [],
+        currentIndex: 0,
+        prev_Value:false
       };
     case TEACHER.TEACHER_RESPONSE:
       return {

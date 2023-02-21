@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
+import { ViewExamAction } from '../../redux/actions/Teacher';
 
 const ViewExam = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(ViewExamAction());
+  }, []);
 
   return (
-    <div>ViewExam</div>
+    <div className='container'>
+    </div>
   )
 }
 

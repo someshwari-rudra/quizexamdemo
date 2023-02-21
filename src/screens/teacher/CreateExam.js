@@ -1,24 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import ExamForm from "../../components/ExamForm";
 import { CreateExamFields } from "../../Data/CreateExamFields";
-import { ON_CHANGE, TEACHER } from "../../redux/actions/Constants";
-import { ClearInputValues } from "../../redux/actions/OnChange";
+import { TEACHER } from "../../redux/actions/Constants";
+import { ClearInputValues, OnChange } from "../../redux/actions/OnChange";
 import {
+  clearAllOnsubmit,
   PostExamQuestions,
   RemoveQuestion,
   StoreExamQuestions,
 } from "../../redux/actions/Teacher";
 
 const CreateExam = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm();
   const dispatch = useDispatch();
   const prevValueExists = useSelector((state) => state.teacher.prev_que);
   const currentIndex = useSelector((state) => state.teacher.currentIndex);
@@ -26,6 +20,19 @@ const CreateExam = () => {
   const questionsAll = useSelector((state) => state.teacher.questions);
   const notes = useSelector((state) => state.teacher.notes);
   const response = useSelector((state) => state.teacher.response);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+    setValue,
+    getValues
+  } = useForm();
+
+  useEffect(() => {
+    setValue("subject", subjectName);
+  }, [setValue, subjectName]);
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
@@ -36,11 +43,8 @@ const CreateExam = () => {
     }
     for (let prop in prevValueExists[currentIndex - 1]) {
       if (prevValueExists[currentIndex - 1].hasOwnProperty(prop)) {
-        dispatch({
-          type: ON_CHANGE,
-          name: prop,
-          value: prevValueExists[currentIndex - 1][prop],
-        });
+        dispatch(OnChange(prop, prevValueExists[currentIndex - 1][prop]));
+        setValue(prop, prevValueExists[currentIndex - 1][prop]);
       }
     }
     dispatch({ type: TEACHER.PREV_LOADING, payload: true });
@@ -70,10 +74,14 @@ const CreateExam = () => {
       value: "Submit",
       typeOf: "submit",
       type: "button",
-      disabled: prevValueExists.length < 1 ? true : false,
-      onClick: (data) => dispatch(PostExamQuestions(data)),
+      disabled: prevValueExists.length < 15 ? true : false,
+      onClick: (data) => handleOnsubmit(data),
     },
   ];
+  const handleOnsubmit = (data) => {
+    dispatch(PostExamQuestions(data));
+    dispatch(clearAllOnsubmit());
+  };
   const allQuestions = {
     subjectName: subjectName,
     questions: questionsAll,
@@ -81,30 +89,51 @@ const CreateExam = () => {
   };
 
   console.log("allQuestions :>> ", allQuestions);
-  const HandleOnSubmit = (data) => {
+
+  const HandleOnNext = (data) => {
     const questions = { ...data };
     console.log("data-createExam :>> ", data);
-    const { subject, question, ans, option, notes, ...restOptions } = questions;
+    const { subject, question, answer, option, notes, ...restOptions } =
+      questions;
     let options = [];
     options.push(...Object.values(restOptions));
     delete questions.Option1;
     delete questions.Option2;
     delete questions.Option3;
-    delete questions.Option4;
+    delete questions.Option4; 
     delete questions.option;
     questions.options = options;
     if (currentIndex >= 0 && currentIndex < questionsAll.length) {
-      dispatch(RemoveQuestion(currentIndex));
-      dispatch(StoreExamQuestions(questions));
+      dispatch(RemoveQuestion(currentIndex, questions, data));
+      reset();
     } else {
       dispatch(StoreExamQuestions(questions));
+      dispatch({ type: TEACHER.PREV_QUESTION, payload: data });
     }
-    dispatch(ClearInputValues());
-    dispatch({ type: TEACHER.PREV_QUESTION, payload: data });
     reset();
+    dispatch(ClearInputValues());
+    dispatch(OnChange("subject", subjectName));
+    setValue("subject", subjectName);
+
+    console.log("questionsAll.length :>> ", questionsAll.length);
+    console.log("currentIndex :>> ", currentIndex);
+    dispatch({
+      type: TEACHER.SET_CURRENT_INDEX,
+      payload: currentIndex + 1,
+    });
+
+    if (currentIndex > 1) {
+      for (let prop in prevValueExists[currentIndex + 1]) {
+        if (prevValueExists[currentIndex + 1].hasOwnProperty(prop)) {
+          dispatch(OnChange(prop, prevValueExists[currentIndex + 1][prop]));
+          setValue(prop, prevValueExists[currentIndex + 1][prop]);
+        }
+      }
+      dispatch({ type: TEACHER.PREV_LOADING, payload: true });
+    }
   };
 
-  const onSubmit = handleSubmit(HandleOnSubmit);
+  const onSubmit = handleSubmit(HandleOnNext);
 
   return (
     <div className="d-flex mt-4 justify-content-center flex-column align-items-center">
@@ -119,6 +148,7 @@ const CreateExam = () => {
         watch={watch}
         register={register}
         onSubmit={onSubmit}
+        getValues={getValues}
         errors={errors}
         ExamFormBtnAttribute={ExamFormBtnAttribute}
         data={allQuestions}
