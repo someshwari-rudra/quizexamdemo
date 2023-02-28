@@ -50,7 +50,7 @@ const ListExam = () => {
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center">
-      <ExamForm
+      {/* <ExamForm
         fields={CreateExamFields}
         watch={watch}
         register={register}
@@ -58,7 +58,9 @@ const ListExam = () => {
         errors={errors}
         ExamFormBtnAttribute={ExamFormBtnAttribute}
         // data={allQuestions}
-      />
+      /> */}
+
+      <h1>list of Exam</h1>
     </div>
   );
 };

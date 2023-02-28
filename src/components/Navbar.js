@@ -10,7 +10,7 @@ function CustomNavbar({ image,color }) {
   const Navigate = useNavigate()
   const handleClick = () => {
     localStorage.clear()
-    Navigate("/")
+    Navigate("/login")
     window.location.reload()
 
   }

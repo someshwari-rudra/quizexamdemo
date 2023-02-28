@@ -2,26 +2,25 @@ import React from "react";
 import { Link } from "react-router-dom";
 import CustomButton from "./CustomButton";
 
-const ButtonMapping = ({ buttonAttributes, id, data }) => {
+const ButtonMapping = ({ buttonAttributes, id, data, viewStudentResult }) => {
   return Array.isArray(buttonAttributes) ? (
     buttonAttributes.map(({ value, typeOf, onClick, ...rest }, index) => {
       switch (typeOf) {
         case "view":
           return (
-            <Link to={`/ViewStudent/${id}`} key={id}>
+            <Link to={`/ViewStudent/${id}`} key={index}>
               <CustomButton
                 // onClick={() => onClick(id)}
                 {...{ ...rest }}
-                key={index}
               >
                 {value}
               </CustomButton>
             </Link>
           );
-        case "view_Details":
+        case "view_result":
           return (
             <CustomButton
-              //onClick={() => onClick(id)}
+              onClick={() => onClick(id)}
               {...{ ...rest }}
               key={index}
             >
@@ -29,6 +28,16 @@ const ButtonMapping = ({ buttonAttributes, id, data }) => {
             </CustomButton>
           );
         case "prev":
+          return (
+            <CustomButton
+              onClick={() => onClick()}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
+          );
+        case "changes":
           return (
             <CustomButton
               onClick={() => onClick()}

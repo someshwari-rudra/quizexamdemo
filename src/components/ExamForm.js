@@ -1,10 +1,19 @@
-
 import React from "react";
 import ButtonMapping from "../reusableComponents/ButtonMapping";
 import CustomTextField from "../reusableComponents/CustomTextField";
 
-const ExamForm = ({ fields, register, errors, onSubmit, watch, ExamFormBtnAttribute, data, getValues}) => {
-
+const ExamForm = ({
+  fields,
+  register,
+  errors,
+  onSubmit,
+  watch,
+  ExamFormBtnAttribute,
+  data,
+  setValue,
+  getValues,
+  answer,
+}) => {
   return (
     <div>
       <div className="form">
@@ -19,6 +28,8 @@ const ExamForm = ({ fields, register, errors, onSubmit, watch, ExamFormBtnAttrib
                 watch={watch}
                 errors={errors}
                 getValues={getValues}
+                setValue={setValue}
+                answer={answer}
               />
             );
           })}

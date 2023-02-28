@@ -10,7 +10,9 @@ const initialState = {
   prev_Value: false,
   notes: [],
   response: "",
-  diableSubject: false,
+  saveOnchnage: true,
+  ViewExam: [],
+  showModal: false,
 };
 export const TeacherReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -72,12 +74,27 @@ export const TeacherReducer = (state = initialState, { type, payload }) => {
         questions: [],
         prev_que: [],
         currentIndex: 0,
-        prev_Value:false
+        prev_Value: false,
       };
     case TEACHER.TEACHER_RESPONSE:
       return {
         ...state,
         response: payload,
+      };
+    case TEACHER.SAVE_ONCHANGE:
+      return {
+        ...state,
+        saveOnchnage: payload,
+      };
+    case TEACHER.VIEW_EXAM:
+      return {
+        ...state,
+        ViewExam: payload,
+      };
+    case TEACHER.SHOW_MODAL:
+      return {
+        ...state,
+        showModal: !state.showModal,
       };
     default:
       return state;

@@ -1,8 +1,9 @@
 import classNames from "classnames";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TEACHER } from "../redux/actions/Constants";
 import { OnChange } from "../redux/actions/OnChange";
+import { saveOnChange } from "../redux/actions/Teacher";
 
 const CustomTextField = (props) => {
   const {
@@ -14,36 +15,31 @@ const CustomTextField = (props) => {
     option,
     errorMessage,
     patternError,
-    radioFileds,
+    radioField,
     pattern,
     input_radio,
     register,
     watch,
     getValues,
+    setValue,
     errors,
     ...inputProps
   } = props;
 
   const values = useSelector((state) => state.teacher.prev_que);
   const currentIndex = useSelector((state) => state.teacher.currentIndex);
-  const prev_Value = useSelector((state) => state.teacher.prev_Value);
+  const show_prev_Value = useSelector((state) => state.teacher.prev_Value);
   const subjectName = useSelector((state) => state.teacher.subjectName);
   const ONchnage = useSelector((state) => state.OnChangeReducer);
+
+  const allOptions = {
+    Option1: ONchnage.Option1,
+    Option2: ONchnage.Option2,
+    Option3: ONchnage.Option3,
+    Option4: ONchnage.Option4,
+  };
+
   const dispatch = useDispatch();
-
-  const subjectValue = watch("subject");
-  const handleBlur = () => {
-    if (subjectValue) {
-      document.getElementsByName("subject")[0].setAttribute("disabled", true);
-    }
-  };
-
-  const handleMouseOver = () => {
-    console.log("runned :>> ", "runned");
-    if (subjectValue) {
-      document.getElementsByName("subject")[0].disabled = false;
-    }
-  };
 
   const prevValues = values[currentIndex] || {};
 
@@ -52,6 +48,7 @@ const CustomTextField = (props) => {
     const value = e.target.value;
     dispatch(OnChange(name, value));
     dispatch({ type: TEACHER.PREV_LOADING, payload: false });
+    dispatch(saveOnChange(false));
   };
 
   const role = JSON.parse(localStorage.getItem("userType"));
@@ -59,6 +56,12 @@ const CustomTextField = (props) => {
   if (role === "student") {
     disabled = true;
   }
+  const selectedOption = getValues()?.option;
+  const answer = getValues()?.[selectedOption];
+  useEffect(() => {
+    setValue("answer", answer);
+  }, [answer, setValue]);
+
   const renderSwitch = (inputType) => {
     switch (inputType) {
       case "input":
@@ -75,9 +78,6 @@ const CustomTextField = (props) => {
                 required: !disabled,
                 pattern: pattern,
                 onChange: handleChange,
-                onBlur: handleBlur,
-                onmouseenter: handleMouseOver,
-                shouldValidate: name === "notes",
                 validate: {
                   matchPassword: (value) => {
                     let watchedValue = watch("password");
@@ -86,12 +86,20 @@ const CustomTextField = (props) => {
                     }
                     return true;
                   },
+                  OptionValidation: (value) => {
+                    const isDuplicateOption =
+                      Object.values(allOptions).filter((v) => v === value)
+                        .length > 1;
+                    return !isDuplicateOption;
+                  },
                 },
               })}
               value={
                 name === "subject"
                   ? subjectName ?? ONchnage[name]
-                  : prev_Value
+                  : name === "answer"
+                  ? answer ?? ""
+                  : show_prev_Value
                   ? prevValues[name] ?? ONchnage[name]
                   : ONchnage[name] ?? ""
               }
@@ -105,119 +113,29 @@ const CustomTextField = (props) => {
             {errors[name]?.type === "matchPassword" && (
               <p className="text-danger">Passwords do not match</p>
             )}
+            {errors?.[name]?.type === "OptionValidation" && (
+              <p className="text-danger">Options can't be repeated..!</p>
+            )}
           </div>
         );
-      case "radio_input":
+
+      case "radio":
         return (
-          <>
-            {option.map((item) => {
-              const { errorMessage: optionErrorMessage, ...rest } = item;
-              let optionDisabled = false;
-              if (role === "teacher") {
-                optionDisabled = true;
-              }
-              return (
-                <div className="row mb-2" key={item.id}>
-                  <div className="col-md-1 d-flex justify-content-center align-items-center">
-                    <input
-                      type="radio"
-                      className="form-check-input m-0"
-                      name="option"
-                      disabled={optionDisabled}
-                      value={item.name}
-                      {...register("option", {
-                        required: !optionDisabled,
-                        onChange: handleChange,
-                      })}
-                      // checked={selectedOption === "option1"}
-                      // onChange={handleOptionChange}
-                    />
-                    {errors?.option?.type === "required" && (
-                      <p className="text-danger">{errorMessage}</p>
-                    )}
-                  </div>
-                  <div className="col">
-                    <input
-                      disabled={role === "student" ? true : false}
-                      className={classNames("form-control shadow-sm", {
-                        "is-invalid": errors[item.name],
-                      })}
-                      {...rest}
-                      {...register(item.name, {
-                        required: !disabled,
-                        onChange: handleChange,
-                        validate: {
-                          uniqueOptions: (value) => {
-                            const options = [
-                              "Option1",
-                              "Option2",
-                              "Option3",
-                              "Option4",
-                            ];
-                            const values = options.map(
-                              (option) => getValues()[option]
-                            );
-                            const uniqueValues = new Set(
-                              values.filter((v) => v !== "")
-                            );
-                            if (uniqueValues.size !== values.length) {
-                              const duplicateOption = options.find(
-                                (option) =>
-                                  values.filter(
-                                    (v) => v === getValues()[option]
-                                  ).length > 1
-                              );
-                              return `${item.name} and ${duplicateOption} cannot have the same value`;
-                            }
-                          },
-                          // OptionValidation: (value) => {
-                          //   console.log("value", value);
-                          //   if (name === "Option1") {
-                          //     return (
-                          //       value === getValues().Option2 &&
-                          //       getValues().Option3 &&
-                          //       getValues().Option4
-                          //     );
-                          //   }
-                          //   if (name === "Option2") {
-                          //     return (
-                          //       value === getValues().Option1 &&
-                          //       getValues().Option3 &&
-                          //       getValues().Option4
-                          //     );
-                          //   }
-                          //   // if (
-                          //   //   value === getValues().Option1 &&
-                          //   //   getValues().Option2 &&
-                          //   //   getValues().Option3 &&
-                          //   //   getValues().Option4
-                          //   // ) {
-                          //   //   return false;
-                          //   // } else {
-                          //   //   return true;
-                          //   // }
-                          // },
-                        },
-                      })}
-                      value={
-                        prev_Value
-                          ? prevValues[item.name] ?? ONchnage[item.name]
-                          : ONchnage[item.name] ?? ""
-                      }
-                    />
-                    {errors?.[item.name]?.type === "required" && (
-                      <p className="text-danger">{optionErrorMessage}</p>
-                    )}
-                    {errors?.[item.name] && (
-                      <div className="text-danger">
-                        {errors[item.name].message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </>
+          <div className="d-flex">
+            <input
+              type="radio"
+              value={value}
+              {...radioField}
+              className="form-check-input shadow-sm"
+              {...register(name, {
+                required: !disabled,
+                onChange: handleChange,
+              })}
+            />
+            {errors?.[name]?.type === "OptionValidation" && (
+              <p className="text-danger">Select any one Option..!</p>
+            )}
+          </div>
         );
 
       case "select":
@@ -253,11 +171,23 @@ const CustomTextField = (props) => {
   };
   return (
     <>
-      {option ? (
-        renderSwitch(inputType)
-      ) : label ? (
+      {label ? (
         <div className="row d-flex d-flex justify-content-center align-items-center">
           <div className="col-1">{label && <label>{label}</label>}</div>
+          <div className="col-11">{renderSwitch(inputType)}</div>
+        </div>
+      ) : radioField ? (
+        <div className="row d-flex d-flex justify-content-center align-items-center">
+          <div className="col-1">
+            <CustomTextField
+              {...radioField}
+              register={register}
+              errors={errors}
+              getValues={getValues}
+              setValue={setValue}
+              answer={answer}
+            />
+          </div>
           <div className="col-11">{renderSwitch(inputType)}</div>
         </div>
       ) : (

@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 
 export const Count = () => {
- const count= useSelector((state) => state.teacher.currentIndex+1);
-  const questionCount = "Q" + count
-return questionCount;
+  const count = useSelector((state) => state.teacher.currentIndex + 1);
+  const questionCount = "Q" + count;
+  return questionCount;
 };
 
 export const CreateExamFields = [
@@ -20,44 +20,104 @@ export const CreateExamFields = [
     name: "question",
     inputType: "input",
     type: "text",
-    label:  <Count/> ,
+    label: <Count />,
     placeholder: "Enter Question",
     errorMessage: "Question is required..!",
   },
+  // {
+  //   id: 3,
+  //   inputType: "radio_input",
+  //   errorMessage: "Please select anyone Option..!",
+  //   option: [
+  //     {
+  //       id: 4,
+  //       name: "Option1",
+  //       type: "text",
+  //       placeholder: "Enter Option1",
+  //       errorMessage: "Option1 is required..!",
+  //     },
+  //     {
+  //       id: 5,
+  //       name: "Option2",
+  //       type: "text",
+  //       placeholder: "Enter Option2",
+  //       errorMessage: "Option2 is required..!",
+  //     },
+  //     {
+  //       id: 6,
+  //       name: "Option3",
+  //       type: "text",
+  //       placeholder: "Enter Option3",
+  //       errorMessage: "Option3 is required..!",
+  //     },
+  //     {
+  //       id: 7,
+  //       name: "Option4",
+  //       type: "text",
+  //       placeholder: "Enter Option4",
+  //       errorMessage: "Option3 is required..!",
+  //     },
+  //   ],
+  // },
   {
-    id: 3,
-    inputType: "radio_input",
-    errorMessage: "Please select anyone Option..!",
-    option: [
-      {
-        id: 4,
-        name: "Option1",
-        type: "text",
-        placeholder: "Enter Option1",
-        errorMessage: "Option1 is required..!",
-      },
-      {
-        id: 5,
-        name: "Option2",
-        type: "text",
-        placeholder: "Enter Option2",
-        errorMessage: "Option2 is required..!",
-      },
-      {
-        id: 6,
-        name: "Option3",
-        type: "text",
-        placeholder: "Enter Option3",
-        errorMessage: "Option3 is required..!",
-      },
-      {
-        id: 7,
-        name: "Option4",
-        type: "text",
-        placeholder: "Enter Option4",
-        errorMessage: "Option3 is required..!",
-      },
-    ],
+    id: 4,
+    name: "Option1",
+    inputType: "input",
+    type: "text",
+    radioField: {
+      name: "option",
+      type: "radio",
+      value: "Option1",
+      inputType: "radio",
+      // errorMessage: "Option1 is required..!",
+    },
+    placeholder: "Enter Option1",
+    errorMessage: "Option1 is required..!",
+  },
+  {
+    id: 5,
+    name: "Option2",
+    inputType: "input",
+    type: "text",
+    radioField: {
+      name: "option",
+      type: "radio",
+      value: "Option2",
+      inputType: "radio",
+      // errorMessage: "Option1 is required..!",
+    },
+    placeholder: "Enter Option2",
+    errorMessage: "Option2 is required..!",
+  },
+  {
+    id: 6,
+    name: "Option3",
+    inputType: "input",
+    type: "text",
+    radioField: {
+      name: "option",
+      type: "radio",
+      inputType: "radio",
+      value: "Option3",
+      // errorMessage: "Option1 is required..!",
+    },
+    placeholder: "Enter Option3",
+    errorMessage: "Option3 is required..!",
+  },
+  {
+    id: 7,
+    name: "Option4",
+    inputType: "input",
+    type: "text",
+    radioField: {
+      name: "option",
+      type: "radio",
+      value: "Option4",
+      inputType: "radio",
+      // errorMessage: "Option1 is required..!",
+    },
+    placeholder: "Enter Option4",
+    errorMessage: "Option4 is required..!",
   },
   {
     id: 10,

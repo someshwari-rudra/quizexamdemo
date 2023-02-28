@@ -3,9 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./components/Login";
 import { AllRoutes } from "./Routes/AllRoutes";
-import Student from "./screens/student";
 import StudentDashboard from "./screens/student/StudentDashboard";
-import Teacher from "./screens/teacher";
 import TeacherDashboard from "./screens/teacher/TeacherDashboard";
 
 function App() {
@@ -16,15 +14,14 @@ function App() {
     const ContentView = () => {
       if (userDetails || token) {
         if (userType === "student")
-          return <Route path="/*" element={<StudentDashboard />} />;
+          return <Route path="/*" exact element={<StudentDashboard />} />;
         if (userType === "teacher")
-          return <Route path="/*" element={<TeacherDashboard />} />;
+          return <Route path="/*" exact element={<TeacherDashboard />} />;
       }
-      return <Route path="/*" element={<Login />} />;
+      return <Route path="/*" exact element={<Login />} />;
     };
   return (
     <>
-
       <Routes>
           {ContentView()}
           {AllRoutes.map((routes, index) => {

@@ -39,30 +39,5 @@ Api.interceptors.response.use(
         "Something Went Wrong"
     );
   },
-  //   async (err) => {
-  //   const originalConfig = err.config;
-
-  //   if (originalConfig.url !== "/dashboard/Teachers" && err.response) {
-  //     // Access Token was expired
-  //     if (err.response.status === 401 && !originalConfig._retry) {
-  //       originalConfig._retry = true;
-  //       console.log('expired Token :>> ', "expired Token");
-  //       // try {
-  //       //   const rs = await Api.post("/auth/refreshtoken", {
-  //       //     refreshToken: TokenService.getLocalRefreshToken(),
-  //       //   });
-
-  //       //   const { accessToken } = rs.data;
-  //       //   TokenService.updateLocalAccessToken(accessToken);
-
-  //       //   return Api(originalConfig);
-  //       // } catch (_error) {
-  //       //   return Promise.reject(_error);
-  //       // }
-  //     }
-  //   }
-
-  //   return Promise.reject(err);
-  // }
 );
 export default Api

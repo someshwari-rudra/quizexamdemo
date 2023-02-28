@@ -18,6 +18,8 @@ const SignUp = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm();
 
   const onsubmit = (data) => {
@@ -46,6 +48,8 @@ const SignUp = () => {
                   register={register}
                   watch={watch}
                   errors={errors}
+                  getValues={getValues}
+                  setValue={setValue}
                 />
               );
             })}

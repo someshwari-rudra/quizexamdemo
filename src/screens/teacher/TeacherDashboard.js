@@ -16,7 +16,7 @@ const TeacherDashboard = () => {
         </div>
         <div className="content">
           <Routes>
-            <Route path="/" element={<Navigate to="/ViewStudent" />}></Route>
+            <Route path="/*" exact element={<Navigate to="/ViewStudent" />}></Route>
             {TeacherRoutes.map((routes, index) => {
               const { path, exact, element: Comp } = routes;
               return (

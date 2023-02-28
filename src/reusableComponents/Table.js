@@ -1,7 +1,7 @@
-import React from 'react'
-import ButtonMapping from './ButtonMapping';
+import React from "react";
+import ButtonMapping from "./ButtonMapping";
 
-const Table = ({ columns, data, buttonAttributes }) => {
+const Table = ({ columns, data, buttonAttributes, }) => {
   return (
     <table className="table table-bordered table-responsive">
       <thead>
@@ -21,7 +21,15 @@ const Table = ({ columns, data, buttonAttributes }) => {
           return (
             <tr key={index}>
               {columns.map((col) => {
-                return <td key={col}>{row[col]}</td>;
+                return Array.isArray(row[col]) ? (
+                  <td className="ul">
+                    {row[col].map((item, i) => (
+                      <li key={`${index + i}_${col}_${i}`}>{item}</li>
+                    ))}
+                  </td>
+                ) : (
+                  <td key={col}>{row[col]}</td>
+                );
               })}
               {
                 <td>
@@ -34,10 +42,9 @@ const Table = ({ columns, data, buttonAttributes }) => {
             </tr>
           );
         })}
-        
       </tbody>
     </table>
   );
 };
 
-export default Table
+export default Table;

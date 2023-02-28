@@ -19,6 +19,8 @@ const ViewSingleStudent = () => {
     dispatch(ViewsingleStudentData(id));
   }, [id, dispatch]);
 
+  let ShowResult = [];
+  console.log('ShowResult :>> ', ShowResult);
   return getSingleStudentData && getSingleStudentData.length === 0 ? (
     <>
       <h1 className="ms-5">loading...</h1>
@@ -29,11 +31,14 @@ const ViewSingleStudent = () => {
       const columns = ["subjectName", "score", "rank", "resultStatus"];
       const ViewStdBtnAttributes = [
         {
-          value: "View Details",
-          typeOf: "view_Details",
+          value: "View Result",
+          typeOf: "view_result",
           type: "button",
           id: _id,
-          //    onClick: (id) => dispatch(deleteUserListByIdAction(id)),
+          onClick: (id) => {
+            ShowResult.push(Result);
+            console.log('ShowResult :>> ', ShowResult);
+          },
         },
       ];
       return (
@@ -49,6 +54,7 @@ const ViewSingleStudent = () => {
                   buttonAttributes={ViewStdBtnAttributes}
                 />
               </div>
+              {ShowResult.length >= 0 ? <h1>ss</h1> : ""}
             </div>
           </div>
         </div>

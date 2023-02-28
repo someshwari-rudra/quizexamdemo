@@ -16,6 +16,8 @@ const Login = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm();
 
   const onsubmit = (data) => {
@@ -23,6 +25,9 @@ const Login = () => {
     dispatch(userLogin(data));
   };
 
+ 
+
+  
   return (
     <div>
       <div className="container vh-100 d-flex justify-content-center align-items-center">
@@ -43,6 +48,8 @@ const Login = () => {
                   register={register}
                   watch={watch}
                   errors={errors}
+                  getValues={getValues}
+                  setValue={setValue}
                 />
               );
             })}
