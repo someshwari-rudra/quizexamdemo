@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import ExamForm from "../../components/ExamForm";
@@ -11,10 +11,13 @@ import {
   RemoveQuestion,
   saveOnChange,
   StoreExamQuestions,
+  StoreNotes,
+  StoreSubjectName,
 } from "../../redux/actions/Teacher";
 import ResuableModal from "../../reusableComponents/ResuableModal";
+import { handleNext, handlePrevious } from "../../utils/HandleExam";
 
-const CreateExamClone = () => {
+const CreateExam = () => {
   const dispatch = useDispatch();
   const prevValueExists = useSelector((state) => state.teacher.prev_que);
   const currentIndex = useSelector((state) => state.teacher.currentIndex);
@@ -24,8 +27,6 @@ const CreateExamClone = () => {
   const response = useSelector((state) => state.teacher.response);
   const saveOnchnage = useSelector((state) => state.teacher.saveOnchnage);
   const ONchnage = useSelector((state) => state.OnChangeReducer);
-
-  // const [show, setShow] = useState(false);
   const showModal = useSelector((state) => state.teacher.showModal);
 
   const handleClose = () => {
@@ -41,24 +42,15 @@ const CreateExamClone = () => {
     reset,
     formState: { errors },
     setValue,
+    clearErrors,
     getValues,
   } = useForm();
 
-  const handlePrevious = () => {
-    dispatch({ type: TEACHER.PREV_LOADING, payload: true });
-    if (currentIndex > 0) {
-      dispatch({
-        type: TEACHER.SET_CURRENT_INDEX,
-        payload: currentIndex - 1,
-      });
-    }
-    for (let prop in prevValueExists[currentIndex - 1]) {
-      if (prevValueExists[currentIndex - 1].hasOwnProperty(prop)) {
-        dispatch(OnChange(prop, prevValueExists[currentIndex - 1][prop]));
-        setValue(prop, prevValueExists[currentIndex - 1][prop]);
-      }
-    }
-  };
+  useEffect(() => {
+    reset();
+    dispatch(clearAllOnsubmit());
+    dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: "" });
+  }, [dispatch, reset]);
 
   const ExamFormBtnAttribute = [
     {
@@ -67,20 +59,26 @@ const CreateExamClone = () => {
       type: "button",
       disabled:
         prevValueExists.length === 0 || currentIndex === 0 ? true : false,
-      onClick: () => handlePrevious(),
+      onClick: () =>
+        handlePrevious(
+          currentIndex,
+          prevValueExists,
+          setValue,
+          dispatch,
+          clearErrors
+        ),
     },
     {
       value: "Changes",
       typeOf: "changes",
       type: "button",
       disabled: saveOnchnage,
-      onClick: (id) => handleShow(),
+      onClick: () => handleShow(),
     },
     {
       value: "Next",
       typeOf: "next",
       type: "submit",
-      // onClick: (id) => dispatch(deleteUserListByIdAction(id)),
     },
     {
       value: "Submit",
@@ -90,15 +88,20 @@ const CreateExamClone = () => {
       onClick: (data) => handleOnsubmit(data),
     },
   ];
-  const handleOnsubmit = (data) => {
-    dispatch(PostExamQuestions(data));
-    dispatch(clearAllOnsubmit());
-  };
+
+  const removeEmptyNote = notes.filter((item) => item !== "");
+
   const allQuestions = {
     subjectName: subjectName,
     questions: questionsAll,
-    notes: notes,
+    notes: removeEmptyNote,
   };
+  console.log("allQuestions :>> ", allQuestions);
+  const handleOnsubmit = () => {
+    dispatch(PostExamQuestions(allQuestions));
+    dispatch(clearAllOnsubmit());
+  };
+
   const handleSaveChanges = () => {
     const questions = {
       question: ONchnage.question,
@@ -120,52 +123,44 @@ const CreateExamClone = () => {
       answer: ONchnage.answer,
       notes: ONchnage.notes,
     };
-    console.log("questions :>> ", questions);
-    console.log("data :>> ", data);
+
     if (currentIndex >= 0 && currentIndex < questionsAll.length) {
       dispatch(RemoveQuestion(currentIndex, questions, data));
-      // setShow(false);
       dispatch({ type: TEACHER.SHOW_MODAL });
       reset();
       dispatch(ClearInputValues());
-      dispatch({
-        type: TEACHER.SET_CURRENT_INDEX,
-        payload: currentIndex + 1,
-      });
-      if (currentIndex >= 0) {
-        for (let prop in prevValueExists[currentIndex + 1]) {
-          if (prevValueExists[currentIndex + 1].hasOwnProperty(prop)) {
-            setValue(prop, prevValueExists[currentIndex + 1][prop]);
-            dispatch(OnChange(prop, prevValueExists[currentIndex + 1][prop]));
-          }
-        }
-        dispatch({ type: TEACHER.PREV_LOADING, payload: true });
-      }
+      handleNext(currentIndex, prevValueExists, setValue, dispatch);
     }
   };
   const HandleOnNext = (data) => {
+    const questions = { ...data };
+    console.log("data-createExam :>> ", data);
+    const { subject, question, answer, option, notes, ...restOptions } =
+      questions;
+    const options = [];
+    options.push(...Object.values(restOptions));
+
+    const storeQueOptionAns = {
+      question: question,
+      answer: answer,
+      options: options,
+    };
+    console.log("storeQueOptionAns :>> ", storeQueOptionAns);
     dispatch(saveOnChange(true));
     if (!(currentIndex >= 0 && currentIndex < questionsAll.length)) {
-      dispatch(StoreExamQuestions(data));
-      dispatch({ type: TEACHER.PREV_QUESTION, payload: data });
+      dispatch(StoreSubjectName(subject));
+      dispatch(StoreNotes(notes));
+      dispatch(StoreExamQuestions(storeQueOptionAns, prevValueExists.length));
+      dispatch({
+        type: TEACHER.PREV_QUESTION,
+        payload: { data: data, curIndexLength: prevValueExists.length + 1 },
+      });
     }
     reset();
     dispatch(ClearInputValues());
     dispatch(OnChange("subject", subjectName));
     setValue("subject", subjectName);
-    dispatch({
-      type: TEACHER.SET_CURRENT_INDEX,
-      payload: currentIndex + 1,
-    });
-    if (currentIndex >= 0) {
-      for (let prop in prevValueExists[currentIndex + 1]) {
-        if (prevValueExists[currentIndex + 1].hasOwnProperty(prop)) {
-          setValue(prop, prevValueExists[currentIndex + 1][prop]);
-          dispatch(OnChange(prop, prevValueExists[currentIndex + 1][prop]));
-        }
-      }
-      dispatch({ type: TEACHER.PREV_LOADING, payload: true });
-    }
+    handleNext(currentIndex, prevValueExists, setValue, dispatch);
   };
 
   const onSubmit = handleSubmit(HandleOnNext);
@@ -190,7 +185,6 @@ const CreateExamClone = () => {
         ExamFormBtnAttribute={ExamFormBtnAttribute}
         setValue={setValue}
         answer={answer}
-        data={allQuestions}
       />
       <ResuableModal
         show={showModal}
@@ -203,4 +197,4 @@ const CreateExamClone = () => {
   );
 };
 
-export default CreateExamClone;
+export default CreateExam;

@@ -1,9 +1,201 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import ExamForm from "../../components/ExamForm";
+import { GiveExamFields } from "../../Data/GiveExamFields";
+import { TEACHER } from "../../redux/actions/Constants";
+import { ClearInputValues, OnChange } from "../../redux/actions/OnChange";
+import { getSingleExam, GiveExam } from "../../redux/actions/Student";
+import {
+  clearAllOnsubmit,
+  StoreExamQuestions,
+} from "../../redux/actions/Teacher";
+import { handleNext, handlePrevious } from "../../utils/HandleExam";
 
 const SingleExam = () => {
-  return (
-    <div>SingleExam</div>
-  )
-}
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+    setValue,
+    getValues,
+    clearErrors,
+  } = useForm();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const {
+    notes: AllNotes,
+    questions: AllQuestions,
+    currentIndex,
+  } = useSelector((state) => state.teacher);
+  const prevValueExists = useSelector((state) => state.teacher.prev_que);
+  const { giveExam, response } = useSelector((state) => state.student);
+  const ONchnage = useSelector((state) => state.OnChangeReducer);
 
-export default SingleExam
+  useEffect(() => {
+    dispatch(getSingleExam(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    reset();
+    dispatch(clearAllOnsubmit());
+    dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: "" });
+  }, [dispatch, reset]);
+
+  useEffect(() => {
+    reset();
+    dispatch(clearAllOnsubmit());
+    for (let i = 0; i < giveExam?.length; i++) {
+      dispatch(StoreExamQuestions({ question: giveExam[i]["_id"] }));
+    }
+    giveExam?.map((item) => {
+      const options = {};
+      let option;
+      item.options.forEach((optionItem, index) => {
+        options[`Option${index + 1}`] = optionItem;
+        if (item.answer === optionItem) {
+          option = `Option${index + 1}`;
+          return option;
+        }
+      });
+      let notes;
+      AllNotes.forEach((note) => {
+        notes = note;
+        return notes;
+      });
+
+      const AllQuestions = {
+        ...item,
+        ...options,
+        option,
+        notes,
+      };
+      dispatch({
+        type: TEACHER.PREV_QUESTION,
+        payload: { data: AllQuestions, curIndexLength: 0 },
+      });
+      dispatch({ type: TEACHER.PREV_LOADING, payload: true });
+      return {
+        ...item,
+        ...options,
+        option,
+      };
+    });
+
+    for (let prop in prevValueExists[currentIndex]) {
+      if (prevValueExists[currentIndex].hasOwnProperty(prop)) {
+        setValue(prop, prevValueExists[currentIndex][prop]);
+        dispatch(OnChange(prop, prevValueExists[currentIndex][prop]));
+      }
+    }
+  }, [dispatch, id, reset, giveExam, AllNotes]);
+
+  const ExamFormBtnAttribute = [
+    {
+      value: "Prev",
+      typeOf: "prev",
+      type: "button",
+      disabled:
+        prevValueExists.length === 0 || currentIndex === 0 ? true : false,
+      onClick: () => {
+        handlePrevious(
+          currentIndex,
+          prevValueExists,
+          setValue,
+          dispatch,
+          clearErrors
+        );
+      },
+    },
+    {
+      value: "Skip",
+      typeOf: "skip",
+      type: "button",
+    },
+    {
+      value: "Next",
+      typeOf: "next",
+      type: "submit",
+      // onClick: (id) => dispatch(deleteUserListByIdAction(id)),
+    },
+    {
+      value: "Submit",
+      typeOf: "submit",
+      type: "button",
+      disabled: currentIndex < 7 ? true : false,
+      onClick: (data) => handleOnsubmit(data),
+    },
+  ];
+
+  const handleOnsubmit = (data) => {
+    // dispatch(PostExamQuestionss(data));
+    // dispatch(EditExamData(id, data));
+    console.log("data submit data:>> ", AllQuestions);
+    dispatch(GiveExam(id, AllQuestions));
+    dispatch(clearAllOnsubmit());
+  };
+
+  const HandleOnNext = (data) => {
+    console.log("data :>> ", data);
+    const questions = { ...data };
+    const { subject, question, answer, option, notes, ...restOptions } =
+      questions;
+    const options = [];
+    options.push(...Object.values(restOptions));
+
+    if (currentIndex >= 0 && currentIndex < AllQuestions.length) {
+      console.log(
+        "prevValueExists[currentIndex] :>> ",
+        prevValueExists[currentIndex]
+      );
+      prevValueExists[currentIndex]["answer"] = ONchnage.answer;
+      prevValueExists[currentIndex]["option"] = ONchnage.option;
+      AllQuestions[currentIndex]["answer"] = ONchnage.answer;
+      reset();
+      dispatch(ClearInputValues());
+      handleNext(currentIndex, prevValueExists, setValue, dispatch);
+    }
+  };
+
+  const onSubmit = handleSubmit(HandleOnNext);
+  const selectedOption = getValues().option;
+  const answer = getValues()[selectedOption];
+
+  return (
+    <div>
+      {giveExam.length ? (
+        <div className="d-flex mt-4 justify-content-center flex-column align-items-center">
+          <h1>Give Exam</h1>
+          {response && (
+            <div className={`alert alert-info mt-3`} role="alert">
+              {response}
+            </div>
+          )}
+          <ExamForm
+            fields={GiveExamFields}
+            watch={watch}
+            register={register}
+            onSubmit={onSubmit}
+            getValues={getValues}
+            errors={errors}
+            ExamFormBtnAttribute={ExamFormBtnAttribute}
+            setValue={setValue}
+            answer={answer}
+            data={AllQuestions}
+          />
+        </div>
+      ) : (
+        <>
+          <h1 className=" d-flex justify-content-center align-items-center">
+            loading....
+          </h1>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default SingleExam;

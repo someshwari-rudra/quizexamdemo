@@ -5,17 +5,16 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
 
-function CustomNavbar({ image,color }) {
+function CustomNavbar({ image, color }) {
   const userName = JSON.parse(localStorage.getItem("userName"));
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
   const handleClick = () => {
-    localStorage.clear()
-    Navigate("/login")
-    window.location.reload()
-
-  }
+    localStorage.clear();
+    Navigate("/");
+    window.location.reload();
+  };
   return (
-    <Navbar className="fixed-top" expand="lg" style={{background:color}}>
+    <Navbar className="fixed-top" expand="lg" style={{ background: color }}>
       <Container fluid>
         <Navbar.Brand href="#">
           <div className="logo">
@@ -31,7 +30,9 @@ function CustomNavbar({ image,color }) {
           ></Nav>
           <Form className="d-flex">
             <span className="me-3 fw-semibold"> Hello {userName}</span>
-            <Button className="button" onClick={handleClick}>Logut</Button>
+            <Button className="button" onClick={handleClick}>
+              Logut
+            </Button>
           </Form>
         </Navbar.Collapse>
       </Container>

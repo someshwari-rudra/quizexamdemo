@@ -1,66 +1,54 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import ExamForm from "../../components/ExamForm";
-import { CreateExamFields } from "../../Data/CreateExamFields";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllExamData } from "../../redux/actions/Student";
+import { StoreNotes, StoreSubjectName } from "../../redux/actions/Teacher";
+import Table from "../../reusableComponents/Table";
 
 const ListExam = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const dispatch = useDispatch();
+  const { allExamData } = useSelector((state) => state.student);
+  let properties;
+  if (allExamData && allExamData.length > 0) {
+    properties = Object.keys(allExamData[0]);
+  }
+  console.log("properties :>> ", properties);
+  useEffect(() => {
+    dispatch(getAllExamData());
+  }, [dispatch]);
+  
 
+  const ViewStudentExamAttribute = [
+    {
+      value: "Give Exam",
+      typeOf: "giveExam",
+      type: "button",
+      onClick: (id) => {
+        const singleExamData = allExamData.filter((item) => item._id === id);
+        const notes = singleExamData[0].notes;
+        const subjectName = singleExamData[0].subjectName;
+        dispatch(StoreSubjectName(subjectName));
+        for (let i = 0; i < notes.length; i++) {
+          dispatch(StoreNotes(notes[i]));
+        }
+      },
+    },
+  ];
 
-  const HandleOnSubmit = (data) => {
-    console.log("data-createExam :>> ", data);
-    reset();
-  };
-  const onSubmit = handleSubmit(HandleOnSubmit);
-   const ExamFormBtnAttribute = [
-     {
-       value: "Prev",
-       typeOf: "prev",
-       type: "button",
-      //  disabled:
-      //    prevValueExists.length === 0 || currentIndex === 0 ? true : false,
-      //  onClick: () => handlePrevious(),
-     },
-     {
-       value: "Skip",
-       typeOf: "skip",
-       type: "button",
-       // onClick: (id) => dispatch(deleteUserListByIdAction(id)),
-     },
-     {
-       value: "Next",
-       typeOf: "next",
-       type: "submit",
-       // onClick: (id) => dispatch(deleteUserListByIdAction(id)),
-     },
-     {
-       value: "Submit",
-       typeOf: "submit",
-       type: "button",
-      //  disabled: prevValueExists.length < 1 ? true : false,
-      //  onClick: (data) => dispatch(PostExamQuestions(data)),
-     },
-   ];
-
+  console.log("allExamData :>> ", allExamData);
   return (
-    <div className="container-fluid d-flex justify-content-center align-items-center">
-      {/* <ExamForm
-        fields={CreateExamFields}
-        watch={watch}
-        register={register}
-        onSubmit={onSubmit}
-        errors={errors}
-        ExamFormBtnAttribute={ExamFormBtnAttribute}
-        // data={allQuestions}
-      /> */}
-
+    <div className="container">
       <h1>list of Exam</h1>
+      {allExamData && allExamData.length > 0 ? (
+        <Table
+          columns={properties}
+          data={allExamData}
+          buttonAttributes={ViewStudentExamAttribute}
+        />
+      ) : (
+        <>
+          <h6>Loading...</h6>
+        </>
+      )}
     </div>
   );
 };

@@ -2,7 +2,7 @@ export function getRandomColor() {
 const colors = [
   "#87CEFA",
   "#ADD8E6",
-  "#E6E9FA",
+  "#FFB6C1",
   "#E0FFFF",
   "#B0C4DE",
   "#DDA0DD",

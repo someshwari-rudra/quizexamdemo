@@ -1,26 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import StudentProfile from "../../components/StudentProfile";
+import { TEACHER } from "../../redux/actions/Constants";
 import { ViewsingleStudentData } from "../../redux/actions/Teacher";
+import ResuableModal from "../../reusableComponents/ResuableModal";
 import Table from "../../reusableComponents/Table";
 import { getRandomColor } from "../../utils/getRandomColor";
 
 const ViewSingleStudent = () => {
   const color = getRandomColor();
   const { id } = useParams();
-  console.log("id :>> ", id);
   const dispatch = useDispatch();
   const getSingleStudentData = useSelector(
     (state) => state.teacher.ViewSingleStudentData
   );
-  console.log("getSingleStudentData :>> ", getSingleStudentData);
+  const showModal = useSelector((state) => state.teacher.showModal);
+  const [resultId, setResultId] = useState(null);
+  const [studentAnswer, setStudentAnswer] = useState([]);
+
   useEffect(() => {
     dispatch(ViewsingleStudentData(id));
   }, [id, dispatch]);
 
-  let ShowResult = [];
-  console.log('ShowResult :>> ', ShowResult);
+  const handleClose = () => {
+    dispatch({ type: TEACHER.SHOW_MODAL });
+  };
+  const handleShow = () => {
+    dispatch({ type: TEACHER.SHOW_MODAL });
+  };
+
+  console.log("studentAnswer :>> ", studentAnswer);
+
   return getSingleStudentData && getSingleStudentData.length === 0 ? (
     <>
       <h1 className="ms-5">loading...</h1>
@@ -28,6 +39,7 @@ const ViewSingleStudent = () => {
   ) : (
     getSingleStudentData.map((student) => {
       const { _id, name, email, Result } = student;
+      console.log("Result[resultId] :>> ", Result[resultId]);
       const columns = ["subjectName", "score", "rank", "resultStatus"];
       const ViewStdBtnAttributes = [
         {
@@ -36,8 +48,9 @@ const ViewSingleStudent = () => {
           type: "button",
           id: _id,
           onClick: (id) => {
-            ShowResult.push(Result);
-            console.log('ShowResult :>> ', ShowResult);
+            setResultId(id);
+            setStudentAnswer([Result[id].studentAnswer]);
+            handleShow();
           },
         },
       ];
@@ -54,7 +67,23 @@ const ViewSingleStudent = () => {
                   buttonAttributes={ViewStdBtnAttributes}
                 />
               </div>
-              {ShowResult.length >= 0 ? <h1>ss</h1> : ""}
+              <ResuableModal
+                show={showModal}
+                handleClose={handleClose}
+                title="student Result"
+                body={
+                  <>
+                    {studentAnswer.flat(1).map((ele, index) => {
+                      console.log("ele", ele);
+                      return (
+                        <div key={index}>
+                          <p>{ele.answer}</p>
+                        </div>
+                      );
+                    })}
+                  </>
+                }
+              />
             </div>
           </div>
         </div>

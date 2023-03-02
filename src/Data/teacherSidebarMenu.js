@@ -7,5 +7,5 @@ export const teacherSidebarMenu = [
   { label: "View Students", link: "/ViewStudent", icon: BsFillPersonFill },
   { label: "Create Exam", link: "/createExam", icon: FaClipboardList },
   { label: "View Exams", link: "/ViewExams", icon: AiOutlineFundView },
-  { label: "Verify Exams    ", link: "/verifyExam", icon: MdVerified },
+  { label: "Verified  Student", link: "/verifyExam", icon: MdVerified },
 ];

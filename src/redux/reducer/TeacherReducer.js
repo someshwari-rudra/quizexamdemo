@@ -11,7 +11,9 @@ const initialState = {
   notes: [],
   response: "",
   saveOnchnage: true,
-  ViewExam: [],
+  ViewAllExam: [],
+  ViewSingleExam: [],
+  VerifiedStudents: [],
   showModal: false,
 };
 export const TeacherReducer = (state = initialState, { type, payload }) => {
@@ -27,19 +29,25 @@ export const TeacherReducer = (state = initialState, { type, payload }) => {
         ViewSingleStudentData: payload,
       };
     case TEACHER.STORE_QUESTIONS:
-      const { subject, notes, ...rest } = payload;
       return {
         ...state,
-        subjectName: subject,
-        notes: [...state.notes, notes],
-        questions: [...state.questions, rest],
+        questions: [...state.questions, payload],
+      };
+    case TEACHER.SUBJECT_NAME:
+      return {
+        ...state,
+        subjectName: payload,
+      };
+    case TEACHER.STORE_NOTES:
+      return {
+        ...state,
+        notes: [...state.notes, payload],
       };
     case TEACHER.PREV_QUESTION:
-      const { subject: sub, ...previous } = payload;
       return {
         ...state,
-        prev_que: [...state.prev_que, { ...previous }],
-        currentIndex: state.prev_que.length + 1,
+        prev_que: [...state.prev_que, payload.data],
+        currentIndex: payload.curIndexLength,
       };
     case TEACHER.SET_CURRENT_INDEX:
       return {
@@ -86,15 +94,39 @@ export const TeacherReducer = (state = initialState, { type, payload }) => {
         ...state,
         saveOnchnage: payload,
       };
-    case TEACHER.VIEW_EXAM:
+    case TEACHER.VIEW_ALL_EXAM:
       return {
         ...state,
-        ViewExam: payload,
+        ViewAllExam: payload,
+      };
+    case TEACHER.VIEW_SINGLE_EXAM:
+      return {
+        ...state,
+        ViewSingleExam: payload,
       };
     case TEACHER.SHOW_MODAL:
       return {
         ...state,
         showModal: !state.showModal,
+      };
+    case TEACHER.POST_PREVIOUS_VALUES:
+      return {
+        ...state,
+        questions: payload.data,
+        prev_que: payload.prevValues,
+      };
+    case TEACHER.DELETE_EXAM:
+      const allExamdata = [...state.ViewAllExam];
+      const data = allExamdata.filter((item) => item._id !== payload);
+      console.log("data :>> ", data);
+      return {
+        ...state,
+        ViewAllExam: data,
+      };
+    case TEACHER.VERIFIED_STUDENTS:
+      return {
+        ...state,
+        VerifiedStudents: payload,
       };
     default:
       return state;

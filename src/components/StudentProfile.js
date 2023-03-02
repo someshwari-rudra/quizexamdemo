@@ -1,7 +1,8 @@
-import React from 'react'
-import Avatar from 'react-avatar';
+import React from "react";
+import Avatar from "react-avatar";
+import { Link } from "react-router-dom";
 
-const StudentProfile = ({color,name,email}) => {
+const StudentProfile = ({ color, name, email, isEdit, onClick }) => {
   return (
     <div className="col-md-3">
       <div className="div">
@@ -18,11 +19,20 @@ const StudentProfile = ({color,name,email}) => {
               <h5 className="me-2">Email:</h5>
               <span>{email}</span>
             </div>
+            {isEdit ? (
+              <Link to={"/updateProfile"} className="w-100" onClick={onClick}>
+                <button className="btn btn-primary w-100">
+                  Update Profile
+                </button>
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default StudentProfile
+export default StudentProfile;

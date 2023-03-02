@@ -18,12 +18,13 @@ const ExamForm = ({
     <div>
       <div className="form">
         <form onSubmit={onSubmit}>
-          {fields.map((currEle) => {
+          {fields?.map((currEle) => {
             const { id, ...inputFieldData } = currEle;
             return (
               <CustomTextField
                 key={id}
                 {...inputFieldData}
+                disable={true}
                 register={register}
                 watch={watch}
                 errors={errors}

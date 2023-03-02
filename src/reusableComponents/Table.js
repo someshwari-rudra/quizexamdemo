@@ -1,7 +1,7 @@
 import React from "react";
 import ButtonMapping from "./ButtonMapping";
 
-const Table = ({ columns, data, buttonAttributes, }) => {
+const Table = ({ columns, data, buttonAttributes }) => {
   return (
     <table className="table table-bordered table-responsive">
       <thead>
@@ -22,10 +22,17 @@ const Table = ({ columns, data, buttonAttributes, }) => {
             <tr key={index}>
               {columns.map((col) => {
                 return Array.isArray(row[col]) ? (
-                  <td className="ul">
-                    {row[col].map((item, i) => (
-                      <li key={`${index + i}_${col}_${i}`}>{item}</li>
-                    ))}
+                  <td className="ul" key={`${index}_${col}`}>
+                    {Array.isArray(row[col]) &&
+                      row[col]?.map((item, i) => {
+                        return (
+                          <li key={i}>
+                            {typeof item === "object"
+                              ? `Score: ${item["score"]}/7 \n Rank: ${item["rank"]}`
+                              : item}
+                          </li>
+                        );
+                      })}
                   </td>
                 ) : (
                   <td key={col}>{row[col]}</td>
@@ -36,6 +43,7 @@ const Table = ({ columns, data, buttonAttributes, }) => {
                   <ButtonMapping
                     buttonAttributes={buttonAttributes}
                     id={row._id}
+                    rowindex={index}
                   />
                 </td>
               }

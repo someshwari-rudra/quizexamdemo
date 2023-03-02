@@ -21,7 +21,9 @@ const CustomTextField = (props) => {
     register,
     watch,
     getValues,
+    disable,
     setValue,
+    answer,
     errors,
     ...inputProps
   } = props;
@@ -56,11 +58,12 @@ const CustomTextField = (props) => {
   if (role === "student") {
     disabled = true;
   }
-  const selectedOption = getValues()?.option;
-  const answer = getValues()?.[selectedOption];
+
   useEffect(() => {
+    console.log("answer :>> ", answer);
     setValue("answer", answer);
-  }, [answer, setValue]);
+    dispatch(OnChange("answer", answer));
+  }, [answer, setValue, dispatch]);
 
   const renderSwitch = (inputType) => {
     switch (inputType) {
@@ -68,16 +71,17 @@ const CustomTextField = (props) => {
         return (
           <div className="mb-2">
             <input
-              disabled={disabled}
+              disabled={disable ? disabled : false}
               className={classNames("form-control shadow-sm", {
                 "is-invalid": errors[name],
               })}
               onChange={handleChange}
               {...inputProps}
               {...register(name, {
-                required: !disabled,
+                required: name === "notes" ? false : !disabled,
                 pattern: pattern,
                 onChange: handleChange,
+
                 validate: {
                   matchPassword: (value) => {
                     let watchedValue = watch("password");
@@ -87,10 +91,19 @@ const CustomTextField = (props) => {
                     return true;
                   },
                   OptionValidation: (value) => {
-                    const isDuplicateOption =
-                      Object.values(allOptions).filter((v) => v === value)
-                        .length > 1;
-                    return !isDuplicateOption;
+                    let isDuplicateOption = true;
+                    if (
+                      name === "Option1" ||
+                      name === "Option2" ||
+                      name === "Option3" ||
+                      name === "Option4"
+                    ) {
+                      isDuplicateOption =
+                        Object.values(allOptions).filter((v) => v === value)
+                          .length > 1;
+                      return !isDuplicateOption;
+                    }
+                    return isDuplicateOption;
                   },
                 },
               })}

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import CustomButton from "./CustomButton";
 
-const ButtonMapping = ({ buttonAttributes, id, data, viewStudentResult }) => {
+const ButtonMapping = ({ buttonAttributes, id, rowindex }) => {
   return Array.isArray(buttonAttributes) ? (
     buttonAttributes.map(({ value, typeOf, onClick, ...rest }, index) => {
       switch (typeOf) {
@@ -20,7 +20,7 @@ const ButtonMapping = ({ buttonAttributes, id, data, viewStudentResult }) => {
         case "view_result":
           return (
             <CustomButton
-              onClick={() => onClick(id)}
+              onClick={() => onClick(rowindex)}
               {...{ ...rest }}
               key={index}
             >
@@ -70,12 +70,42 @@ const ButtonMapping = ({ buttonAttributes, id, data, viewStudentResult }) => {
         case "submit":
           return (
             <CustomButton
-              onClick={() => onClick(data)}
+              onClick={() => onClick()}
               {...{ ...rest }}
               key={index}
             >
               {value}
             </CustomButton>
+          );
+        case "edit_Exam":
+          return (
+            <Link to={`/ViewExams/${id}`} key={index}>
+              <CustomButton
+                onClick={() => onClick(id)}
+                {...{ ...rest }}
+                key={index}
+              >
+                {value}
+              </CustomButton>
+            </Link>
+          );
+        case "delete_Exam":
+          return (
+            <CustomButton
+              onClick={() => onClick(id)}
+              {...{ ...rest }}
+              key={index}
+            >
+              {value}
+            </CustomButton>
+          );
+        case "giveExam":
+          return (
+            <Link key={index} to={`/listExam/${id}`}>
+              <CustomButton onClick={() => onClick(id)} {...{ ...rest }}>
+                {value}
+              </CustomButton>
+            </Link>
           );
         default:
           return (
