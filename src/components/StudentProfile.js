@@ -20,11 +20,22 @@ const StudentProfile = ({ color, name, email, isEdit, onClick }) => {
               <span>{email}</span>
             </div>
             {isEdit ? (
-              <Link to={"/updateProfile"} className="w-100" onClick={onClick}>
-                <button className="btn btn-primary w-100">
-                  Update Profile
-                </button>
-              </Link>
+              <div className=" d-flex justify-content-between align-items-center">
+                <Link to={"/updateProfile"} onClick={onClick}>
+                  <button className="btn btn-primary w-100">
+                    Update Profile
+                  </button>
+                </Link>
+                <Link
+                  to={"/resetPassword"}
+                  className="mx-4 my-2"
+                  onClick={onClick}
+                >
+                  <button className="btn btn-warning w-100">
+                    reset Password
+                  </button>
+                </Link>
+              </div>
             ) : (
               ""
             )}

@@ -1,26 +1,44 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { forgotPasswordAction } from "../redux/actions/auth";
+import { Link } from "react-router-dom";
+import { NewPasswordAction } from "../redux/actions/auth";
 import { AUTH } from "../redux/actions/Constants";
 import { OnChange } from "../redux/actions/OnChange";
-// import { useSelector } from 'react-redux';
 import CustomTextField from "../reusableComponents/CustomTextField";
 
-const ForgetPassword = () => {
+const NewConfirmPassword = () => {
   const { response, loading } = useSelector((state) => state.Auth);
-  const ForgetPasswordField = {
-    id: 1,
-    name: "email",
-    type: "email",
-    inputType: "input",
-    placeholder: "Email",
-    pattern:
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    errorMessage: "Email is Required..!",
-    patternError: "Enter valid Email...!",
-    // required: true,
-  };
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  console.log(token);
+
+  const NewConfirmPasswordFields = [
+    {
+      id: 3,
+      name: "Password",
+      inputType: "input",
+      type: "password",
+      pattern: /[a-zA-Z0-9]{6,30}/,
+      autoComplete: "password",
+      placeholder: "password",
+      errorMessage: "password is required..!",
+      patternError: "min password length is 6 and max 30",
+      // required: true,
+    },
+    {
+      id: 4,
+      name: "ConfirmPassword",
+      inputType: "input",
+      type: "password",
+      // pattern: "password",
+      autoComplete: "password",
+      placeholder: "confirm Password",
+      errorMessage: "confirm Password is required..!",
+
+      // required: true,
+    },
+  ];
   const {
     register,
     handleSubmit,
@@ -33,7 +51,8 @@ const ForgetPassword = () => {
   const dispatch = useDispatch();
   const onsubmit = (data) => {
     delete data.answer;
-    dispatch(forgotPasswordAction(data));
+    console.log("data :>> ", data);
+    dispatch(NewPasswordAction(token, data));
     dispatch({ type: AUTH.LOADING });
     reset();
     Object.keys(data).map((item) => {
@@ -45,21 +64,26 @@ const ForgetPassword = () => {
     <div>
       <div className="container vh-100 d-flex justify-content-center align-items-center">
         <div className="login_wrapper">
-          <h1 className="signUp">Forget Password</h1>
+          <h1 className="signUp">New Password</h1>
           {response && (
             <div className={`alert alert-success mt-3`} role="alert">
               {response}
             </div>
           )}
           <form onSubmit={handleSubmit(onsubmit)}>
-            <CustomTextField
-              {...ForgetPasswordField}
-              register={register}
-              watch={watch}
-              setValue={setValue}
-              getValues={getValues}
-              errors={errors}
-            />
+            {NewConfirmPasswordFields.map((inputFields, index) => {
+              return (
+                <CustomTextField
+                  key={index}
+                  {...inputFields}
+                  register={register}
+                  watch={watch}
+                  setValue={setValue}
+                  getValues={getValues}
+                  errors={errors}
+                />
+              );
+            })}
             <div className="d-flex flex-column justify-content-center align-items-center">
               <button
                 type="submit"
@@ -76,6 +100,9 @@ const ForgetPassword = () => {
                 )}
                 submit
               </button>
+              <Link to="/login" className="m-2">
+                All ready have an account? Login.
+              </Link>
             </div>
           </form>
         </div>
@@ -84,4 +111,4 @@ const ForgetPassword = () => {
   );
 };
 
-export default ForgetPassword;
+export default NewConfirmPassword;

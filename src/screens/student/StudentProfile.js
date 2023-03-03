@@ -18,7 +18,7 @@ const Profile = () => {
     dispatch(OnChange("name", studentProfile?.name));
   };
 
-  return (
+  return studentProfile.hasOwnProperty("name") ? (
     <div className="container-fluid mt-3 d-flex justify-content-center flex-column align-items-center">
       <h1 className="m-2">Your Profile</h1>
       <StudentProfile
@@ -28,6 +28,10 @@ const Profile = () => {
         isEdit={true}
         onClick={handleOnclick}
       />
+    </div>
+  ) : (
+    <div className="container d-flex justify-content-center align-items-center">
+      <h1 className="text-cenetr">loading...</h1>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TEACHER } from "../../redux/actions/Constants";
 import { VerifiedStudentForExam } from "../../redux/actions/Teacher";
 import Table from "../../reusableComponents/Table";
 

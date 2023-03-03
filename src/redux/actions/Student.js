@@ -1,5 +1,5 @@
 import Api from "../../config/api";
-import { STUDENT } from "./Constants";
+import { STUDENT, TEACHER } from "./Constants";
 
 export const getAllExamData = () => (dispatch) => {
   Api.get(`student/studentExam`)
@@ -28,6 +28,7 @@ export const GiveExam = (id, data) => (dispatch) => {
     .then((res) => {
       console.log("res :>> ", res);
       dispatch({ type: STUDENT.RESPONSE, payload: res.message });
+      dispatch({ type: TEACHER.LOADING });
     })
     .catch((error) => {
       console.log("error :>> ", error);
@@ -46,10 +47,11 @@ export const GetStudentProfile = () => (dispatch) => {
 };
 
 export const updateStudentProfile = (name) => (dispatch) => {
-  Api.put(`student/studentProfile`, {name})
+  Api.put(`student/studentProfile`, { name })
     .then((res) => {
       console.log("res :>> ", res);
       dispatch({ type: STUDENT.RESPONSE, payload: res.message });
+      dispatch({ type: TEACHER.LOADING });
     })
     .catch((error) => {
       console.log("error :>> ", error);

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LoginFields } from "../Data/LoginFields";
 import { userLogin } from "../redux/actions/auth";
+import { OnChange } from "../redux/actions/OnChange";
 import CustomTextField from "../reusableComponents/CustomTextField";
 
 const Login = () => {
@@ -18,16 +19,19 @@ const Login = () => {
     formState: { errors },
     getValues,
     setValue,
+    reset,
   } = useForm();
 
   const onsubmit = (data) => {
     console.log(data);
+    reset();
+    const properties = Object.keys(data);
+    properties.map((item) => {
+      return dispatch(OnChange(item, ""));
+    });
     dispatch(userLogin(data));
   };
 
- 
-
-  
   return (
     <div>
       <div className="container vh-100 d-flex justify-content-center align-items-center">

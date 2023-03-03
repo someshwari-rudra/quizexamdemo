@@ -13,8 +13,7 @@ const ResuableModal = ({
       show={show}
       onHide={handleClose}
       aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+      centered>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -24,7 +23,7 @@ const ResuableModal = ({
           No
         </Button>
         <Button variant="primary" onClick={handleSaveChanges}>
-          Save Changes
+          Yes
         </Button>
       </Modal.Footer>
     </Modal>

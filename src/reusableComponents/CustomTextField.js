@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TEACHER } from "../redux/actions/Constants";
 import { OnChange } from "../redux/actions/OnChange";
-import { saveOnChange } from "../redux/actions/Teacher";
+import { saveOnChange, StoreSubjectName } from "../redux/actions/Teacher";
 
 const CustomTextField = (props) => {
   const {
@@ -31,7 +31,9 @@ const CustomTextField = (props) => {
   const values = useSelector((state) => state.teacher.prev_que);
   const currentIndex = useSelector((state) => state.teacher.currentIndex);
   const show_prev_Value = useSelector((state) => state.teacher.prev_Value);
-  const subjectName = useSelector((state) => state.teacher.subjectName);
+  const { subjectName, subjectNameExits } = useSelector(
+    (state) => state.teacher
+  );
   const ONchnage = useSelector((state) => state.OnChangeReducer);
 
   const allOptions = {
@@ -50,6 +52,10 @@ const CustomTextField = (props) => {
     const value = e.target.value;
     dispatch(OnChange(name, value));
     dispatch({ type: TEACHER.PREV_LOADING, payload: false });
+    if (name === "subject") {
+      dispatch({ type: TEACHER.CHANGE_SUBJECT_NAME, payload: false });
+      dispatch(StoreSubjectName(value));
+    }
     dispatch(saveOnChange(false));
   };
 
@@ -108,7 +114,7 @@ const CustomTextField = (props) => {
                 },
               })}
               value={
-                name === "subject"
+                name === "subject" && subjectNameExits
                   ? subjectName ?? ONchnage[name]
                   : name === "answer"
                   ? answer ?? ""

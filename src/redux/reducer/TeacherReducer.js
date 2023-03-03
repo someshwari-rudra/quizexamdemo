@@ -15,6 +15,8 @@ const initialState = {
   ViewSingleExam: [],
   VerifiedStudents: [],
   showModal: false,
+  loading: false,
+  subjectNameExits: false,
 };
 export const TeacherReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -127,6 +129,17 @@ export const TeacherReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         VerifiedStudents: payload,
+      };
+    case TEACHER.LOADING:
+      return {
+        ...state,
+        loading: !state.loading,
+      };
+    case TEACHER.CHANGE_SUBJECT_NAME:
+      console.log("payload :>> ", payload);
+      return {
+        ...state,
+        subjectNameExits: payload,
       };
     default:
       return state;

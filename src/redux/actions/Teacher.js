@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 import Api from "../../config/api";
 import { TEACHER } from "./Constants";
 
@@ -36,6 +35,7 @@ export const PostExamQuestions = (data) => (dispatch) => {
   Api.post(`/dashboard/Teachers/Exam`, data)
     .then((response) => {
       console.log("response from postExam :>> ", response);
+      dispatch({ type: TEACHER.LOADING });
       dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: response.message });
     })
     .catch((error) => {
@@ -123,6 +123,7 @@ export const EditExamData = (id, data) => (dispatch) => {
     .then((res) => {
       console.log("res :>> ", res);
       dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: res.message });
+      dispatch({ type: TEACHER.LOADING });
     })
     .catch((error) => {
       console.log("error :>> ", error);

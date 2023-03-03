@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TEACHER } from "../../redux/actions/Constants";
+import { OnChange } from "../../redux/actions/OnChange";
 import {
   deleteSingleExam,
-  StoreExamQuestions,
   StoreNotes,
   StoreSubjectName,
   ViewExamAction,
@@ -16,7 +16,7 @@ const ViewExam = () => {
   const dispatch = useDispatch();
   const [deleteExamId, setDeleteExamId] = useState(null);
 
-  const { ViewAllExam, ViewSingleExam } = useSelector((state) => state.teacher);
+  const { ViewAllExam } = useSelector((state) => state.teacher);
   const showModal = useSelector((state) => state.teacher.showModal);
   const columns = ["subjectName", "notes", "email"];
   useEffect(() => {
@@ -34,6 +34,7 @@ const ViewExam = () => {
         const subjectName = singleExamData[0].subjectName;
         dispatch(ViewSingleExamAction(id));
         dispatch(StoreSubjectName(subjectName));
+        dispatch({ type: TEACHER.CHANGE_SUBJECT_NAME, payload: true });
         for (let i = 0; i < notes.length; i++) {
           dispatch(StoreNotes(notes[i]));
         }
@@ -53,9 +54,9 @@ const ViewExam = () => {
     dispatch({ type: TEACHER.SHOW_MODAL });
   };
   const handleSaveChanges = () => {
+    dispatch(deleteSingleExam(deleteExamId));
     console.log("delete the data :>> ", "delete the data");
     dispatch({ type: TEACHER.SHOW_MODAL });
-    dispatch(deleteSingleExam(deleteExamId));
   };
   return ViewAllExam && ViewAllExam.length === 0 ? (
     <>

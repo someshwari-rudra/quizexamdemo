@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   isDataLoaded: false,
   userDetails: undefined,
+  response: "",
 };
 export const AuthReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -21,6 +22,11 @@ export const AuthReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         userDetails: payload,
+      };
+    case AUTH.RESPONSE:
+      return {
+        ...state,
+        response: payload,
       };
     default:
       return state;

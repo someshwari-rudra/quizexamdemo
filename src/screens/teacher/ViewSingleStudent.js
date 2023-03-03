@@ -77,7 +77,7 @@ const ViewSingleStudent = () => {
                       console.log("ele", ele);
                       return (
                         <div key={index}>
-                          <p>{ele.answer}</p>
+                          <p>{ele?.answer}</p>
                         </div>
                       );
                     })}

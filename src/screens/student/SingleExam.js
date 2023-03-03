@@ -3,15 +3,20 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ExamForm from "../../components/ExamForm";
+import Loading from "../../components/Loading";
 import { GiveExamFields } from "../../Data/GiveExamFields";
-import { TEACHER } from "../../redux/actions/Constants";
+import { STUDENT, TEACHER } from "../../redux/actions/Constants";
 import { ClearInputValues, OnChange } from "../../redux/actions/OnChange";
 import { getSingleExam, GiveExam } from "../../redux/actions/Student";
 import {
   clearAllOnsubmit,
   StoreExamQuestions,
 } from "../../redux/actions/Teacher";
-import { handleNext, handlePrevious } from "../../utils/HandleExam";
+import {
+  handleNext,
+  handlePrevious,
+  uploadQuestions,
+} from "../../utils/HandleExam";
 
 const SingleExam = () => {
   const {
@@ -30,6 +35,7 @@ const SingleExam = () => {
     notes: AllNotes,
     questions: AllQuestions,
     currentIndex,
+    loading,
   } = useSelector((state) => state.teacher);
   const prevValueExists = useSelector((state) => state.teacher.prev_que);
   const { giveExam, response } = useSelector((state) => state.student);
@@ -42,7 +48,7 @@ const SingleExam = () => {
   useEffect(() => {
     reset();
     dispatch(clearAllOnsubmit());
-    dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: "" });
+    dispatch({ type: STUDENT.RESPONSE, payload: "" });
   }, [dispatch, reset]);
 
   useEffect(() => {
@@ -51,40 +57,7 @@ const SingleExam = () => {
     for (let i = 0; i < giveExam?.length; i++) {
       dispatch(StoreExamQuestions({ question: giveExam[i]["_id"] }));
     }
-    giveExam?.map((item) => {
-      const options = {};
-      let option;
-      item.options.forEach((optionItem, index) => {
-        options[`Option${index + 1}`] = optionItem;
-        if (item.answer === optionItem) {
-          option = `Option${index + 1}`;
-          return option;
-        }
-      });
-      let notes;
-      AllNotes.forEach((note) => {
-        notes = note;
-        return notes;
-      });
-
-      const AllQuestions = {
-        ...item,
-        ...options,
-        option,
-        notes,
-      };
-      dispatch({
-        type: TEACHER.PREV_QUESTION,
-        payload: { data: AllQuestions, curIndexLength: 0 },
-      });
-      dispatch({ type: TEACHER.PREV_LOADING, payload: true });
-      return {
-        ...item,
-        ...options,
-        option,
-      };
-    });
-
+    uploadQuestions(giveExam, AllNotes, dispatch);
     for (let prop in prevValueExists[currentIndex]) {
       if (prevValueExists[currentIndex].hasOwnProperty(prop)) {
         setValue(prop, prevValueExists[currentIndex][prop]);
@@ -119,7 +92,6 @@ const SingleExam = () => {
       value: "Next",
       typeOf: "next",
       type: "submit",
-      // onClick: (id) => dispatch(deleteUserListByIdAction(id)),
     },
     {
       value: "Submit",
@@ -131,9 +103,8 @@ const SingleExam = () => {
   ];
 
   const handleOnsubmit = (data) => {
-    // dispatch(PostExamQuestionss(data));
-    // dispatch(EditExamData(id, data));
     console.log("data submit data:>> ", AllQuestions);
+    dispatch({ type: TEACHER.LOADING });
     dispatch(GiveExam(id, AllQuestions));
     dispatch(clearAllOnsubmit());
   };
@@ -147,10 +118,6 @@ const SingleExam = () => {
     options.push(...Object.values(restOptions));
 
     if (currentIndex >= 0 && currentIndex < AllQuestions.length) {
-      console.log(
-        "prevValueExists[currentIndex] :>> ",
-        prevValueExists[currentIndex]
-      );
       prevValueExists[currentIndex]["answer"] = ONchnage.answer;
       prevValueExists[currentIndex]["option"] = ONchnage.option;
       AllQuestions[currentIndex]["answer"] = ONchnage.answer;
@@ -166,9 +133,14 @@ const SingleExam = () => {
 
   return (
     <div>
-      {giveExam.length ? (
-        <div className="d-flex mt-4 justify-content-center flex-column align-items-center">
+      {giveExam?.length ? (
+        <div
+          className={`d-flex mt-4 justify-content-center flex-column align-items-center position-relative ${
+            loading && "opacity"
+          }`}
+        >
           <h1>Give Exam</h1>
+          <Loading />
           {response && (
             <div className={`alert alert-info mt-3`} role="alert">
               {response}
