@@ -11,6 +11,7 @@ import { getSingleExam, GiveExam } from "../../redux/actions/Student";
 import {
   clearAllOnsubmit,
   StoreExamQuestions,
+  StoreSubjectName,
 } from "../../redux/actions/Teacher";
 import {
   handleNext,
@@ -36,6 +37,7 @@ const SingleExam = () => {
     questions: AllQuestions,
     currentIndex,
     loading,
+    subjectName,
   } = useSelector((state) => state.teacher);
   const prevValueExists = useSelector((state) => state.teacher.prev_que);
   const { giveExam, response } = useSelector((state) => state.student);
@@ -46,9 +48,13 @@ const SingleExam = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    reset();
-    dispatch(clearAllOnsubmit());
+    dispatch(StoreSubjectName(subjectName));
+    dispatch({ type: TEACHER.CHANGE_SUBJECT_NAME, payload: true });
     dispatch({ type: STUDENT.RESPONSE, payload: "" });
+    const clearValuesOnchnage = Object.keys(ONchnage);
+    clearValuesOnchnage.map((item) => {
+      return dispatch(OnChange(item, ""));
+    });
   }, [dispatch, reset]);
 
   useEffect(() => {
@@ -106,6 +112,7 @@ const SingleExam = () => {
     console.log("data submit data:>> ", AllQuestions);
     dispatch({ type: TEACHER.LOADING });
     dispatch(GiveExam(id, AllQuestions));
+    dispatch({ type: TEACHER.CHANGE_SUBJECT_NAME, payload: false });
     dispatch(clearAllOnsubmit());
   };
 
@@ -121,6 +128,7 @@ const SingleExam = () => {
       prevValueExists[currentIndex]["answer"] = ONchnage.answer;
       prevValueExists[currentIndex]["option"] = ONchnage.option;
       AllQuestions[currentIndex]["answer"] = ONchnage.answer;
+      dispatch({ type: TEACHER.CHANGE_SUBJECT_NAME, payload: true });
       reset();
       dispatch(ClearInputValues());
       handleNext(currentIndex, prevValueExists, setValue, dispatch);

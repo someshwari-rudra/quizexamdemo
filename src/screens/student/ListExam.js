@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { OnChange } from "../../redux/actions/OnChange";
 import { getAllExamData } from "../../redux/actions/Student";
 import { StoreNotes, StoreSubjectName } from "../../redux/actions/Teacher";
 import Table from "../../reusableComponents/Table";
@@ -15,7 +16,6 @@ const ListExam = () => {
   useEffect(() => {
     dispatch(getAllExamData());
   }, [dispatch]);
-  
 
   const ViewStudentExamAttribute = [
     {
@@ -27,6 +27,7 @@ const ListExam = () => {
         const notes = singleExamData[0].notes;
         const subjectName = singleExamData[0].subjectName;
         dispatch(StoreSubjectName(subjectName));
+        dispatch(OnChange("subject", subjectName));
         for (let i = 0; i < notes.length; i++) {
           dispatch(StoreNotes(notes[i]));
         }

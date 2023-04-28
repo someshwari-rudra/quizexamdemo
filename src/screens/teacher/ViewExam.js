@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TEACHER } from "../../redux/actions/Constants";
-import { OnChange } from "../../redux/actions/OnChange";
 import {
   deleteSingleExam,
   StoreNotes,

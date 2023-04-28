@@ -52,6 +52,7 @@ const ReusableExam = ({ request, id, title }) => {
   useEffect(() => {
     reset();
     dispatch(clearAllOnsubmit());
+
     dispatch({ type: TEACHER.TEACHER_RESPONSE, payload: "" });
     const clearValuesOnchnage = Object.keys(ONchnage);
     clearValuesOnchnage.map((item) => {

@@ -1,0 +1,47 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Asia/Kolkata
+X-LIC-LOCATION:Asia/Kolkata
+BEGIN:STANDARD
+TZOFFSETFROM:+0530
+TZOFFSETTO:+0530
+TZNAME:IST
+DTSTART:19700101T000000
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Asia/Kolkata:20230306T160000
+DTEND;TZID=Asia/Kolkata:20230306T163000
+DTSTAMP:20230303T095456Z
+ORGANIZER;CN=HR Tagline:mailto:hr@taglineinfotech.com
+UID:26t3n8c2cj1i7qb0gt8te086e5@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=srb@taglineinfotech.com;X-NUM-GUESTS=0:mailto:srb@taglineinfotech.c
+ om
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=HR Tagline;X-NUM-GUESTS=0:mailto:hr@taglineinfotech.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=someshwari.tagline@gmail.com;X-NUM-GUESTS=0:mailto:someshwari.tagli
+ ne@gmail.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/tjp-xmmd-neb
+X-MICROSOFT-CDO-OWNERAPPTID:-1005482996
+CREATED:20230303T095345Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~::~:~::-\nJoin with Google Meet: https://meet.google.com/tj
+ p-xmmd-neb\nOr dial: (US) +1 650-980-4500 PIN: 722323199#\nMore phone numbe
+ rs: https://tel.meet/tjp-xmmd-neb?pin=6209979000710&hs=7\n\nLearn more abou
+ t Meet at: https://support.google.com/a/users/answer/9282720\n\nPlease do n
+ ot edit this section.\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20230303T095455Z
+LOCATION:
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Self Assessment Meeting (one to one)
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
